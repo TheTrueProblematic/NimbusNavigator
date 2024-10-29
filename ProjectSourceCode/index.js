@@ -126,7 +126,7 @@ app.post('/login', async (req, res) => {
                 req.session.user = user;
                 req.session.save();
                 // Redirect to /discover
-                res.redirect('/discover');
+                res.redirect('/currentWeather');
             } else {
                 // Incorrect password
                 res.render('pages/login', { message: 'Incorrect username or password.', error: true });
@@ -151,34 +151,45 @@ const auth = (req, res, next) => {
 app.use(auth);
 
 // GET /discover - Display events from Ticketmaster API
-app.get('/discover', (req, res) => {
-    axios({
-        url: 'https://app.ticketmaster.com/discovery/v2/events.json',
-        method: 'GET',
-        dataType: 'json',
-        headers: {
-            'Accept-Encoding': 'application/json',
-        },
-        params: {
-            apikey: process.env.API_KEY,
-            keyword: 'music', // You can choose any keyword here
-            size: 10, // Number of events to return
-        },
-    })
-        .then(response => {
-            const events = response.data._embedded ? response.data._embedded.events : [];
-            res.render('pages/discover', { events: events });
-        })
-        .catch(error => {
-            console.error('Error fetching events:', error);
-            res.render('pages/discover', { events: [], message: 'Error fetching events', error: true });
-        });
-});
+// app.get('/discover', (req, res) => {
+//     axios({
+//         url: 'https://app.ticketmaster.com/discovery/v2/events.json',
+//         method: 'GET',
+//         dataType: 'json',
+//         headers: {
+//             'Accept-Encoding': 'application/json',
+//         },
+//         params: {
+//             apikey: process.env.API_KEY,
+//             keyword: 'music', // You can choose any keyword here
+//             size: 10, // Number of events to return
+//         },
+//     })
+//         .then(response => {
+//             const events = response.data._embedded ? response.data._embedded.events : [];
+//             res.render('pages/discover', { events: events });
+//         })
+//         .catch(error => {
+//             console.error('Error fetching events:', error);
+//             res.render('pages/discover', { events: [], message: 'Error fetching events', error: true });
+//         });
+// });
 
 // GET /logout - Log the user out
 app.get('/logout', (req, res) => {
     req.session.destroy();
     res.render('pages/logout', { message: 'Logged out Successfully' });
+});
+
+// NIMBUSNAV ROUTES
+app.get('/climateContest', (req, res) => {
+    res.render('pages/climateContest');
+});
+app.get('/currentWeather', (req, res) => {
+    res.render('pages/currentWeather');
+});
+app.get('/weatherFacts', (req, res) => {
+    res.render('pages/weatherFacts');
 });
 
 // *****************************************************

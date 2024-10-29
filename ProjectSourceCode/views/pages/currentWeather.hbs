@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+{{> message}}
+<head>
+    <style>
+        body {
+            background-color: #628ad5; /* Light blue background */
+        }
+        .weather-container {
+            text-align: center;
+            background-color: #76abd9;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+        }
+
+        .weather-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .weather-info {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="mt-4 mb-4 text-center">Current Weather!</h2>
+        <div class="weather-container">
+            <div class="weather-info">
+                <h3>Sunny</h3>
+                <p>Temperature: 75°F</p>
+                <p>Humidity: 40%</p>
+                <p>Wind Speed: 10 mph</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
