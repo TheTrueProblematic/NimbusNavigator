@@ -1,44 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 {{> message}}
 <head>
-    <style>
-        body {
-            background-color: #628ad5; /* Light blue background */
-        }
-        .weather-container {
-            text-align: center;
-            background-color: #76abd9;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            margin-top: 20px;
-        }
-
-        .weather-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-
-        .weather-info {
-            margin-top: 15px;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7-Day Forecast for Boulder</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 </head>
-
 <body>
-    <div class="container">
-        <h2 class="mt-4 mb-4 text-center">Current Weather!</h2>
-        <div class="weather-container">
-            <div class="weather-info">
-                <h3>Sunny</h3>
-                <p>Temperature: 75°F</p>
-                <p>Humidity: 40%</p>
-                <p>Wind Speed: 10 mph</p>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">7-Day Weather Forecast for Boulder</h1>
+        
+        <div class="row">
+            {{#each temperatures}}
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{name}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{temperature}}°{{temperatureUnit}}</h6>
+                        <p class="card-text">{{detailedForecast}}</p>
+                    </div>
+                </div>
             </div>
+            {{/each}}
         </div>
     </div>
-</body>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

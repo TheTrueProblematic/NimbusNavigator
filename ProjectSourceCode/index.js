@@ -175,6 +175,48 @@ app.use(auth);
 //         });
 // });
 
+app.get('/currentWeather', (req, res) => {
+    axios({
+        url: 'https://api.weather.gov/points/40.0150,-105.2705',
+        method: 'GET',
+        headers: {
+            'Accept-Encoding': 'application/json',
+        },
+    })
+        .then(response => {
+            // Sets URL that responds with forecast data
+            // This second URL is returned within the first response
+            const forecastUrl = response.data.properties.forecast;
+
+            // Fetch forecast data using response from first URL
+            // https://api.weather.gov/points/40.0150,-105.2705
+            return axios({
+                url: forecastUrl,
+                method: 'GET',
+                headers: {
+                    'Accept-Encoding': 'application/json',
+                },
+            });
+        })
+        .then(forecastResponse => {
+            const forecastData = forecastResponse.data;
+
+            // Get information from forecast (ex. temperature)
+            const temperatures = forecastData.properties.periods.map(period => ({
+                name: period.name, // Time period (ex. tuesday, tuesday night)
+                temperature: period.temperature, // Temperature
+                temperatureUnit: period.temperatureUnit, // Unit (i think this is always in F)
+                detailedForecast: period.detailedForecast, // Description of forecast
+            }));
+
+            res.render('pages/currentWeather', { temperatures: temperatures });
+        })
+        .catch(error => {
+            console.error('Error fetching forecast:', error);
+            res.render('pages/currentWeather', { temperatures: [], message: 'Error fetching forecast', error: true });
+        });
+});
+
 // GET /logout - Log the user out
 app.get('/logout', (req, res) => {
     req.session.destroy();
