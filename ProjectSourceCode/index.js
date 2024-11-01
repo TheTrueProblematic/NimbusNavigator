@@ -69,6 +69,8 @@ app.use(
 
 // Serve static files from the fillerImages directory
 app.use('/fillerImages', express.static(path.join(__dirname, 'fillerImages')));
+// Serve static files from a 'public' directory for icons
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Root route redirects to login
 app.get('/', (req, res) => {
@@ -146,6 +148,24 @@ const auth = (req, res, next) => {
 // Apply authentication middleware to all routes after this
 app.use(auth);
 
+// Function to determine Beaufort number based on wind speed in mph
+function getBeaufortNumber(windSpeedMph) {
+    if (windSpeedMph < 1) return 0;
+    if (windSpeedMph >= 1 && windSpeedMph <= 3) return 1;
+    if (windSpeedMph >= 4 && windSpeedMph <= 7) return 2;
+    if (windSpeedMph >= 8 && windSpeedMph <= 12) return 3;
+    if (windSpeedMph >= 13 && windSpeedMph <= 18) return 4;
+    if (windSpeedMph >= 19 && windSpeedMph <= 24) return 5;
+    if (windSpeedMph >= 25 && windSpeedMph <= 31) return 6;
+    if (windSpeedMph >= 32 && windSpeedMph <= 38) return 7;
+    if (windSpeedMph >= 39 && windSpeedMph <= 46) return 8;
+    if (windSpeedMph >= 47 && windSpeedMph <= 54) return 9;
+    if (windSpeedMph >= 55 && windSpeedMph <= 63) return 10;
+    if (windSpeedMph >= 64 && windSpeedMph <= 72) return 11;
+    if (windSpeedMph >= 73) return 12;
+    return 0; // Default to 0 if no match
+}
+
 // GET /currentWeather - Display current weather and forecast
 app.get('/currentWeather', (req, res) => {
     axios({
@@ -159,7 +179,7 @@ app.get('/currentWeather', (req, res) => {
             const forecastUrl = response.data.properties.forecast;
             const observationStationsUrl = response.data.properties.observationStations;
 
-            // Use Promise.all to make both requests in parallel
+            // Use Promise.all to make multiple requests in parallel
             return Promise.all([
                 axios.get(forecastUrl),
                 axios.get(observationStationsUrl),
@@ -230,11 +250,11 @@ app.get('/currentWeather', (req, res) => {
             const seaLevelPressureInHg = seaLevelPressurePa !== null ? seaLevelPressurePa * 0.0002953 : null;
             const visibilityMiles = visibilityMeters !== null ? visibilityMeters / 1609.34 : null;
             const precipitationInches =
-                precipitationLastHourMm !== null ? precipitationLastHourMm / 25.4 : null;
+                precipitationLastHourMm !== null ? precipitationLastHourMm / 25.4 : 0.00;
             const precipitation3hInches =
-                precipitationLast3HoursMm !== null ? precipitationLast3HoursMm / 25.4 : null;
+                precipitationLast3HoursMm !== null ? precipitationLast3HoursMm / 25.4 : 0.00;
             const precipitation6hInches =
-                precipitationLast6HoursMm !== null ? precipitationLast6HoursMm / 25.4 : null;
+                precipitationLast6HoursMm !== null ? precipitationLast6HoursMm / 25.4 : 0.00;
 
             // Prepare data for the template
             const templateData = {
@@ -249,9 +269,9 @@ app.get('/currentWeather', (req, res) => {
                 visibility: visibilityMiles !== null ? visibilityMiles.toFixed(1) : 'N/A',
                 maxTempPast24H: maxTempPast24HF !== null ? maxTempPast24HF.toFixed(1) : 'N/A',
                 minTempPast24H: minTempPast24HF !== null ? minTempPast24HF.toFixed(1) : 'N/A',
-                precipitation: precipitationInches !== null ? precipitationInches.toFixed(2) : '0.00',
-                precipitation3h: precipitation3hInches !== null ? precipitation3hInches.toFixed(2) : '0.00',
-                precipitation6h: precipitation6hInches !== null ? precipitation6hInches.toFixed(2) : '0.00',
+                precipitation: precipitationInches.toFixed(2),
+                precipitation3h: precipitation3hInches.toFixed(2),
+                precipitation6h: precipitation6hInches.toFixed(2),
                 humidity: relativeHumidity !== null ? relativeHumidity.toFixed(1) : 'N/A',
                 windChill: windChillF !== null ? windChillF.toFixed(1) : 'N/A',
                 heatIndex: heatIndexF !== null ? heatIndexF.toFixed(1) : 'N/A',
@@ -277,30 +297,84 @@ app.get('/currentWeather', (req, res) => {
 
             templateData.imageName = imageName;
 
-            // Fetch air quality data from BreezoMeter API
-            const breezometerApiKey = process.env.BREEZOMETER_API_KEY;
-            const lat = 40.0150;
-            const lon = -105.2705;
-            const breezometerUrl = `https://api.breezometer.com/air-quality/v2/current-conditions?lat=${lat}&lon=${lon}&key=${breezometerApiKey}`;
+            // Determine which weather icon to use based on current conditions
+            // Map conditions to icons
+            const weatherIcons = [
+                { keywords: ['clear', 'sunny'], icon: 'clear-day.svg' },
+                { keywords: ['cloudy'], icon: 'cloudy.svg' },
+                { keywords: ['overcast'], icon: 'overcast.svg' },
+                { keywords: ['drizzle'], icon: 'drizzle.svg' },
+                { keywords: ['hail'], icon: 'hail.svg' },
+                { keywords: ['rain'], icon: 'rain.svg' },
+                { keywords: ['sleet'], icon: 'sleet.svg' },
+                { keywords: ['smoke'], icon: 'smoke.svg' },
+                { keywords: ['snow'], icon: 'snow.svg' },
+                { keywords: ['mist'], icon: 'mist.svg' },
+                { keywords: ['hurricane'], icon: 'hurricane.svg' },
+                { keywords: ['tornado'], icon: 'tornado.svg' },
+                { keywords: ['wind'], icon: 'wind.svg' },
+                { keywords: ['dust'], icon: 'dust.svg' },
+                { keywords: ['thunderstorms', 'thunderstorm'], icon: 'thunderstorms.svg' },
+                { keywords: ['fog'], icon: 'fog.svg' },
+                { keywords: ['haze'], icon: 'haze.svg' },
+                // Add more mappings as needed
+            ];
 
-            axios
-                .get(breezometerUrl)
-                .then(breezometerResponse => {
-                    const airQualityData = breezometerResponse.data;
-                    const aqi = airQualityData.data.indexes.baqi.aqi;
-                    const aqiCategory = airQualityData.data.indexes.baqi.category;
+            let weatherIcon = 'other.svg';
+            for (const item of weatherIcons) {
+                for (const keyword of item.keywords) {
+                    if (description.includes(keyword)) {
+                        weatherIcon = item.icon;
+                        break;
+                    }
+                }
+                if (weatherIcon !== 'other.svg') break;
+            }
 
-                    templateData.airQuality = `${aqi} (${aqiCategory})`;
+            templateData.weatherIcon = weatherIcon;
 
-                    res.render('pages/currentWeather', templateData);
-                })
-                .catch(error => {
-                    console.error('Error fetching air quality data:', error);
+            // Fetch moon phase data
+            const today = new Date();
+            const moonPhaseApiUrl = `https://api.farmsense.net/v1/moonphases/?d=${Math.floor(
+                today.getTime() / 1000
+            )}`;
 
-                    templateData.airQuality = 'N/A';
+            return Promise.all([templateData, axios.get(moonPhaseApiUrl)]);
+        })
+        .then(([templateData, moonResponse]) => {
+            const moonData = moonResponse.data[0];
+            const moonPhase = moonData.Phase.toLowerCase();
 
-                    res.render('pages/currentWeather', templateData);
-                });
+            // Map moon phases to icons
+            const moonPhases = {
+                'new moon': 'moon-new.svg',
+                'waxing crescent': 'moon-waxing-crescent.svg',
+                'first quarter': 'moon-first-quarter.svg',
+                'waxing gibbous': 'moon-waxing-gibbous.svg',
+                'full moon': 'moon-full.svg',
+                'waning gibbous': 'moon-waning-gibbous.svg',
+                'last quarter': 'moon-last-quarter.svg',
+                'waning crescent': 'moon-waning-crescent.svg',
+            };
+
+            let moonIcon = 'moon-new.svg'; // Default icon
+            for (const phase in moonPhases) {
+                if (moonPhase.includes(phase)) {
+                    moonIcon = moonPhases[phase];
+                    break;
+                }
+            }
+
+            templateData.moonIcon = moonIcon;
+
+            // Determine wind icon based on wind speed using Beaufort scale
+            const windSpeedMph = parseFloat(templateData.windSpeed);
+
+            const beaufortNumber = getBeaufortNumber(windSpeedMph);
+            const windIcon = `wind-beaufort-${beaufortNumber}.svg`;
+            templateData.windIcon = windIcon;
+
+            res.render('pages/currentWeather', templateData);
         })
         .catch(error => {
             console.error('Error fetching data:', error);
