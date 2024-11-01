@@ -25,13 +25,23 @@ const hbs = handlebars.create({
 });
 
 // Database configuration
+// const dbConfig = {
+//     host: 'db', // The database server
+//     port: 5432, // The database port
+//     database: process.env.POSTGRES_DB, // The database name
+//     user: process.env.POSTGRES_USER, // The user account to connect with
+//     password: process.env.POSTGRES_PASSWORD, // The password of the user account
+// };
+
+// Database configuration 2
 const dbConfig = {
-    host: 'db', // The database server
-    port: 5432, // The database port
-    database: process.env.POSTGRES_DB, // The database name
-    user: process.env.POSTGRES_USER, // The user account to connect with
-    password: process.env.POSTGRES_PASSWORD, // The password of the user account
+    host: process.env.DB_HOST, // Database server address (will be the RDS endpoint)
+    port: 5432, // Database port
+    database: process.env.POSTGRES_DB, // Database name
+    user: process.env.POSTGRES_USER, // Database user
+    password: process.env.POSTGRES_PASSWORD, // Database password
 };
+
 
 const db = pgp(dbConfig);
 
