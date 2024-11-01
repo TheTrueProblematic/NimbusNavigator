@@ -1,0 +1,30 @@
+{{!-- {{> message}}
+
+<div class="container">
+    <h2 class="mt-4 mb-4">Discover Events</h2>
+    <div class="row">
+        {{#each events}}
+            <div class="col-md-4 col-sm-6">
+                <div class="card mb-4">
+                    {{#if images}}
+                        <img src="{{images.[0].url}}" class="card-img-top" alt="{{name}}">
+                    {{else}}
+                        <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="{{name}}">
+                    {{/if}}
+                    <div class="card-body">
+                        <h5 class="card-title">{{name}}</h5>
+                        <p class="card-text">
+                            {{#if dates.start.localDate}}
+                                Date: {{dates.start.localDate}}
+                            {{/if}}
+                            {{#if dates.start.localTime}}
+                                <br>Time: {{dates.start.localTime}}
+                            {{/if}}
+                        </p>
+                        <a href="{{url}}" class="btn btn-primary">Book Now</a>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div> --}}

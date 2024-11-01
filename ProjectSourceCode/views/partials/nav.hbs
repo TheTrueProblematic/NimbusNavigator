@@ -1,0 +1,47 @@
+<head>
+    <style>
+        .nav-link {
+            transition: font-weight 0.3s, font-size 0.3s, color 0.3s;
+        }
+        .nav-link:hover {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #3f2c8a;
+        }
+        .navbar {
+            height: 60px;
+            background-color: rgb(226, 226, 138);
+        }
+    </style>
+</head>
+<header>
+    <nav class="navbar navbar-expand-sm border-bottom">
+        <div class="container">
+            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbar-collapse" aria-controls="navbar" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <!-- TODO: For Discover, add a <a> tag with an attribute href to call the '/discover' API -->
+                        <a class="nav-link" href="/currentWeather">Current Weather</a>
+                    </li>
+                    <li class="nav-item">
+                        <!-- TODO: For Discover, add a <a> tag with an attribute href to call the '/discover' API -->
+                        <a class="nav-link" href="/climateContest">Climate Contest</a>
+                    </li>
+                    <li class="nav-item">
+                        <!-- TODO: For Discover, add a <a> tag with an attribute href to call the '/discover' API -->
+                        <a class="nav-link" href="/weatherFacts">Weather Facts</a>
+                    </li>
+                </ul>
+                <div class="nav-item me-1">
+                    <a class="nav-link" href="/logout">logout</a>
+                    <!-- TODO: For Logout, add a <a> tag with an attribute href to call the '/logout API -->
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>

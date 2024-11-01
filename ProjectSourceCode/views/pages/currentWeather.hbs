@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+{{> message}}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Current Weather for Boulder</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        /* Additional custom styles */
+        .top-bar {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .top-bar h1 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+        .top-bar h2 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        .weather-image {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+<!-- Top horizontal bar -->
+<div class="top-bar text-center">
+    <h1>It is currently {{currentTemp}}°F and {{currentConditions}} out.</h1>
+</div>
+
+<!-- Main content area -->
+<div class="container my-5">
+    <div class="row">
+        <!-- Left column (1/4 width) -->
+        <div class="col-md-3">
+            <h3>Weather Details</h3>
+            <ul class="list-group">
+                {{#ifNotNA airQuality}}
+                    <li class="list-group-item">Air Quality: {{airQuality}}</li>
+                {{/ifNotNA}}
+                {{#ifNotNA windSpeed}}
+                    <li class="list-group-item">Wind Speed: {{windSpeed}} mph</li>
+                {{/ifNotNA}}
+                {{#ifNotNA windDirection}}
+                    <li class="list-group-item">Wind Direction: {{windDirection}}°</li>
+                {{/ifNotNA}}
+                {{#ifNotNA windGust}}
+                    <li class="list-group-item">Wind Gust: {{windGust}} mph</li>
+                {{/ifNotNA}}
+                {{#ifNotNA windChill}}
+                    <li class="list-group-item">Wind Chill: {{windChill}}°F</li>
+                {{/ifNotNA}}
+                {{#ifNotNA heatIndex}}
+                    <li class="list-group-item">Heat Index: {{heatIndex}}°F</li>
+                {{/ifNotNA}}
+                {{#ifNotNA humidity}}
+                    <li class="list-group-item">Humidity: {{humidity}}%</li>
+                {{/ifNotNA}}
+                {{#ifNotNA dewpoint}}
+                    <li class="list-group-item">Dew Point: {{dewpoint}}°F</li>
+                {{/ifNotNA}}
+                {{#ifNotNA barometricPressure}}
+                    <li class="list-group-item">Pressure: {{barometricPressure}} inHg</li>
+                {{/ifNotNA}}
+                {{#ifNotNA seaLevelPressure}}
+                    <li class="list-group-item">Sea Level Pressure: {{seaLevelPressure}} inHg</li>
+                {{/ifNotNA}}
+                {{#ifNotNA visibility}}
+                    <li class="list-group-item">Visibility: {{visibility}} miles</li>
+                {{/ifNotNA}}
+                {{#ifNotNA precipitation}}
+                    <li class="list-group-item">Precipitation: {{precipitation}} inches</li>
+                {{/ifNotNA}}
+                {{#ifNotNA precipitation3h}}
+                    <li class="list-group-item">Precipitation (3h): {{precipitation3h}} inches</li>
+                {{/ifNotNA}}
+                {{#ifNotNA precipitation6h}}
+                    <li class="list-group-item">Precipitation (6h): {{precipitation6h}} inches</li>
+                {{/ifNotNA}}
+                {{#ifNotNA maxTempPast24H}}
+                    <li class="list-group-item">Max Temp Last 24h: {{maxTempPast24H}}°F</li>
+                {{/ifNotNA}}
+                {{#ifNotNA minTempPast24H}}
+                    <li class="list-group-item">Min Temp Last 24h: {{minTempPast24H}}°F</li>
+                {{/ifNotNA}}
+            </ul>
+        </div>
+        <!-- Right column (3/4 width) -->
+        <div class="col-md-9">
+            <img src="/fillerImages/{{imageName}}" alt="Weather Image" class="weather-image">
+        </div>
+    </div>
+
+    <!-- Forecast section -->
+    <h3 class="mt-5">7-Day Forecast</h3>
+    <div class="row">
+        {{#each temperatures}}
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{name}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted"><strong>{{temperature}}°{{temperatureUnit}}</strong></h6>
+                        <p class="card-text">{{detailedForecast}}</p>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
