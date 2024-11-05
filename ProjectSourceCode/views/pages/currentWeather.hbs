@@ -12,71 +12,116 @@
         body {
             margin: 0;
             padding: 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f7f9fc;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 60px;
+            background-color: #bfda95;
+            border-bottom: 2px solid #a1c6ea;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            /* on top */
+            z-index: 1000;
         }
 
         .top-bar {
             background-color: #ffffff;
             padding: 20px;
             height: 80px;
-            /* Adjust height to not cover navbar */
-            position: absolute;
+            position: fixed;
             right: 0;
             width: 66.6666%;
-            overflow: hidden;
             text-align: center;
             top: 60px;
-            /* Adjusted to match the navbar height */
+            border: 1px solid #a1c6ea;
+            border-top: none;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            /* on top except for navbar */
+            z-index: 999;
         }
 
         .left-bar {
-            background-color: #ffdfd6;
+            background-color: #cfe9ff; 
             padding: 20px;
             height: calc(100vh - 60px);
-            /* Adjust height to not cover navbar */
             position: fixed;
             width: 33.3333%;
-            overflow: hidden;
             text-align: center;
             top: 60px;
-            /* Adjusted to match the navbar height */
+            border-right: 2px solid #a1c6ea;
+            box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+            z-index: 998;
         }
 
         .left-bar img {
             max-height: calc(100% - 100px);
             object-fit: cover;
-            object-position: center;
             width: 100%;
         }
 
         .main-content {
             margin-left: 33.3333%;
             padding: 20px;
-            padding-top: 80px;
-            /* Add padding to account for navbar */
+            padding-top: 140px;
         }
 
         .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            grid-auto-rows: minmax(100px, auto);
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 20px;
+            padding-top: 20px;
         }
 
-        .card-grid .card {
+        .card {
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 15px;
+            /* for fancy */
+            border-radius: 12px;
+            background: linear-gradient(145deg, #a1c6ea, #74b0e0);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+           
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .card.wind-card {
+            grid-column: span 2;
         }
 
         .weather-icon {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
         }
 
         .small-card {
-            width: 40px;
-            /* Adjust as needed */
+            width: 60px;
+            text-align: center;
+        }
+
+        .list-group-item {
+            background-color: #e4f2ff; 
+            border: 1px solid #a1c6ea;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+
+        .list-group-item:hover {
+            background-color: #d1e9f6;
         }
     </style>
 </head>
@@ -84,11 +129,9 @@
 <body>
     <!-- Left vertical bar -->
     <div class="left-bar">
-        <h1>The current temperature is {{currentTemp}}°F.</h1>
-        <h2>Outside there is {{currentConditions}} right now.</h2>
+        <h2 class="card">It is {{currentConditions}} with a tempature of {{currentTemp}}°F</h2>
         <img src="/fillerImages/{{imageName}}" alt="Weather Image">
     </div>
-
 
     <div class="top-bar">
         {{!-- <div class="position-absolute top-0 end-0"></div> --}}
@@ -99,44 +142,41 @@
     <!-- Main content area -->
     <div class="main-content">
         <div class="card-grid">
-            <div class="row">
-                <!-- Weather Card -->
-                <div class="card" style="width: 100px, height: 200px">
-                    <h3>Weather</h3>
-                    <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{weatherIcon}}"
-                        alt="Weather Icon" class="weather-icon">
-                </div>
-
-                <!-- Moon Card -->
-                <div class="card">
-                    <h3>Moon</h3>
-                    <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{moonIcon}}"
-                        alt="Moon Phase Icon" class="weather-icon">
-                </div>
-
-                <!-- Wind Card -->
-                <div class="card">
-                    <h3>Wind</h3>
-                    <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{windIcon}}"
-                        alt="Wind Icon" class="weather-icon">
-                    <p>{{windSpeed}} mph</p>
-                </div>
+            <!-- Weather Card -->
+            <div class="card">
+                <h3>Weather</h3>
+                <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{weatherIcon}}"
+                    alt="Weather Icon" class="weather-icon">
+                <p>{{currentTemp}}°F</p>
             </div>
 
-            <div class="row">
-                <!-- Weather Card -->
-                <div class="card">
-                    <h3>Weather</h3>
-                    <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{weatherIcon}}"
-                        alt="Weather Icon" class="weather-icon">
-                </div>
+            <!-- Wind Card -->
+            <div class="card d-flex flex-row align-items-center wind-card" style="padding: 10px;">
 
-                <!-- Moon Card -->
-                <div class="card">
-                    <h3>Moon</h3>
-                    <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{moonIcon}}"
-                        alt="Moon Phase Icon" class="weather-icon">
+                <div>
+                    <h3>Wind</h3>
+                    {{#ifNotNA windSpeed}}
+                    <p><strong>Speed:</strong> {{windSpeed}} mph</p>
+                    {{/ifNotNA}}
+                    {{#ifNotNA windDirection}}
+                    <p><strong>Direction:</strong> {{windDirection}}°</p>
+                    {{/ifNotNA}}
+                    {{#ifNotNA windChill}}
+                    <p><strong>Wind Chill:</strong> {{windChill}}</p>
+                    {{/ifNotNA}}
+                    {{#ifNotNA windGust}}
+                    <p><strong>Gust:</strong> {{windGust}} mph</p>
+                    {{/ifNotNA}}
                 </div>
+                <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{windIcon}}" alt="Wind Icon"
+                    class="weather-icon me-3">
+            </div>
+
+            <!-- Moon Card -->
+            <div class="card">
+                <h3>Moon</h3>
+                <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{moonIcon}}"
+                    alt="Moon Phase Icon" class="weather-icon">
             </div>
 
             <div class="row">
@@ -144,15 +184,6 @@
                 <div class="card">
                     <h3>Information</h3>
                     <ul class="list-group">
-                        {{#ifNotNA windDirection}}
-                        <li class="list-group-item">Wind Direction: {{windDirection}}°</li>
-                        {{/ifNotNA}}
-                        {{#ifNotNA windGust}}
-                        <li class="list-group-item">Wind Gust: {{windGust}} mph</li>
-                        {{/ifNotNA}}
-                        {{#ifNotNA windChill}}
-                        <li class="list-group-item">Wind Chill: {{windChill}}°F</li>
-                        {{/ifNotNA}}
                         {{#ifNotNA heatIndex}}
                         <li class="list-group-item">Heat Index: {{heatIndex}}°F</li>
                         {{/ifNotNA}}
@@ -192,7 +223,9 @@
             </div>
         </div>
 
-        <div class="row row-cols-1 row-cols-md-6">
+        <!-- Commented out this: (not entirely sure what it is for) -->
+
+        {{!-- <div class="row row-cols-1 row-cols-md-6">
             <div class="col">
                 <div class="small-card">
                     <!-- Weather Card -->
@@ -236,7 +269,7 @@
                 </div>
             </div>
 
-        </div>
+        </div> --}}
 
 
         <!-- Commented out 7-Day Forecast -->
