@@ -1,5 +1,56 @@
-<div class="container mt-5">
-    <h2>You have been logged out successfully.</h2>
-    <p>Thank you for using our service.</p>
-    <p>Back to Login <a href="/login">HERE</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logged Out</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #e4e9fd, #f0e6ff);
+            font-family: Arial, sans-serif;
+            color: #3f2c8a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 400px;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h2 {
+            color: #3f2c8a;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #3f2c8a;
+        }
+        .btn-primary {
+            border-radius: 30px;
+            background: linear-gradient(135deg, #6fa3ef, #9fc5e8);
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #9fc5e8, #6fa3ef);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Logged out successfully!</h2>
+        <p>Thank you for using our service.</p>
+        <a href="/login" class="btn btn-primary mt-3">Click here to return to log in</a>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.2/js/bootstrap.min.js"></script>
+</body>
+</html>
