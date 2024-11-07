@@ -1,2 +1,5 @@
 .idea
 /ProjectSourceCode/node_modules/
+.DS_Store
+ProjectSourceCode/.DS_Store
+ProjectSourceCode/views/.DS_Store

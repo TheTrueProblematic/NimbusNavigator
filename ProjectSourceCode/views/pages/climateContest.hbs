@@ -1,35 +1,282 @@
 <!DOCTYPE html>
 <html>
 
-{{> message}}
-
 <head>
+    <title>Climate Contest</title>
     <style>
         body {
             background-color: #cb768b;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            margin: 0;
+            padding: 0;
         }
 
-        .weather-container {
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quiz-container {
             text-align: center;
             background-color: #d390a1;
             border-radius: 15px;
-            padding: 20px;
+            padding: 30px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            margin-top: 50px;
+        }
+
+        .quiz-container img {
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-question {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-options {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .quiz-options li {
+            margin: 10px 0;
+        }
+
+        .quiz-options button {
+            background-color: #ffcc00;
+            border: none;
+            padding: 15px 20px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .quiz-options button:hover {
+            background-color: #ffdd33;
+        }
+
+        .quiz-feedback {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+
+        .congratulations {
+            font-size: 32px;
+            margin-top: 50px;
+        }
+
+        .congratulations img {
+            max-width: 300px;
             margin-top: 20px;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h2 class="mt-4 mb-4 text-center">Climate Contest!</h2>
-        <div class="weather-container">
-            <div class="weather-info">
-                <p>Do you have what it takes to forsee the forecast? (quippy line about how this is the quiz page)</p>
-                <h3>Question...</h3>
-            </div>
-        </div>
+<div class="container">
+    <div class="quiz-container" id="quiz-container">
+        <!-- Quiz content will be injected here -->
     </div>
+</div>
+
+<script>
+    const questions = [
+        {
+            question: "What type of weather is this?",
+            icon: "https://basmilius.github.io/weather-icons/production/fill/all/clear-day.svg",
+            options: [
+                { text: "Snowy", correct: false },
+                { text: "Cloudy", correct: false },
+                { text: "Sunny", correct: true },
+                { text: "Rainy", correct: false },
+            ]
+        },
+        {
+            question: "Which season is typically associated with this weather?",
+            icon: "https://basmilius.github.io/weather-icons/production/fill/all/snow.svg",
+            options: [
+                { text: "Summer", correct: false },
+                { text: "Spring", correct: false },
+                { text: "Winter", correct: true },
+                { text: "Autumn", correct: false },
+            ]
+        },
+        {
+            question: "What time of day is this weather most likely to occur?",
+            icon: "https://basmilius.github.io/weather-icons/production/fill/all/fog.svg",
+            options: [
+                { text: "Noon", correct: false },
+                { text: "Morning", correct: true },
+                { text: "Afternoon", correct: false },
+                { text: "Evening", correct: false },
+            ]
+        },
+        {
+            question: "Which weather phenomenon is often accompanied by thunder and lightning?",
+            icon: "https://basmilius.github.io/weather-icons/production/fill/all/thunderstorms.svg",
+            options: [
+                { text: "Snowstorm", correct: false },
+                { text: "Drizzle", correct: false },
+                { text: "Thunderstorm", correct: true },
+                { text: "Fog", correct: false },
+            ]
+        },
+        {
+            question: "What type of precipitation is shown in this icon?",
+            icon: "https://basmilius.github.io/weather-icons/production/fill/all/hail.svg",
+            options: [
+                { text: "Rain", correct: false },
+                { text: "Snow", correct: false },
+                { text: "Hail", correct: true },
+                { text: "Sleet", correct: false },
+            ]
+        },
+        {
+            question: "Which weather condition can reduce visibility on the road?",
+            icon: "https://basmilius.github.io/weather-icons/production/fill/all/mist.svg",
+            options: [
+                { text: "Sunny", correct: false },
+                { text: "Windy", correct: false },
+                { text: "Misty", correct: true },
+                { text: "Clear", correct: false },
+            ]
+        },
+        {
+            question: "What weather condition is characterized by strong winds lifting dust into the air?",
+            icon: "https://basmilius.github.io/weather-icons/production/fill/all/dust.svg",
+            options: [
+                { text: "Rainstorm", correct: false },
+                { text: "Snowstorm", correct: false },
+                { text: "Dust storm", correct: true },
+                { text: "Fog", correct: false },
+            ]
+        },
+        {
+            question: "Which weather condition is often a result of wildfires?",
+            icon: "https://basmilius.github.io/weather-icons/production/fill/all/smoke.svg",
+            options: [
+                { text: "Rain", correct: false },
+                { text: "Snow", correct: false },
+                { text: "Smoke", correct: true },
+                { text: "Hail", correct: false },
+            ]
+        },
+        {
+            question: "What weather condition is depicted by this icon?",
+            icon: "https://basmilius.github.io/weather-icons/production/fill/all/haze.svg",
+            options: [
+                { text: "Rain", correct: false },
+                { text: "Snow", correct: false },
+                { text: "Haze", correct: true },
+                { text: "Wind", correct: false },
+            ]
+        },
+        {
+            question: "How many MPH is necessary for a 7 on the Beaufort Wind Scale?",
+            icon: "https://basmilius.github.io/weather-icons/production/fill/all/wind-beaufort-7.svg",
+            options: [
+                { text: "8–12 MPH", correct: false },
+                { text: "32–38 MPH", correct: true },
+                { text: "64–72 MPH", correct: false },
+                { text: "25–31 MPH", correct: false },
+            ]
+        },
+    ];
+
+    let currentQuestionIndex = 0;
+
+    function showQuestion() {
+        const quizContainer = document.getElementById('quiz-container');
+        quizContainer.innerHTML = '';
+
+        if (currentQuestionIndex < questions.length) {
+            const questionData = questions[currentQuestionIndex];
+
+            const questionElement = document.createElement('div');
+
+            const questionTitle = document.createElement('h2');
+            questionTitle.className = 'quiz-question';
+            questionTitle.textContent = questionData.question;
+
+            const iconElement = document.createElement('img');
+            iconElement.src = questionData.icon;
+            iconElement.alt = 'Weather Icon';
+
+            const optionsList = document.createElement('ul');
+            optionsList.className = 'quiz-options';
+
+            questionData.options.forEach((option, index) => {
+                const optionItem = document.createElement('li');
+
+                const optionButton = document.createElement('button');
+                optionButton.textContent = option.text;
+                optionButton.addEventListener('click', () => selectOption(option));
+
+                optionItem.appendChild(optionButton);
+                optionsList.appendChild(optionItem);
+            });
+
+            questionElement.appendChild(iconElement);
+            questionElement.appendChild(questionTitle);
+            questionElement.appendChild(optionsList);
+
+            quizContainer.appendChild(questionElement);
+        } else {
+            showCongratulations();
+        }
+    }
+
+    function selectOption(option) {
+        const quizContainer = document.getElementById('quiz-container');
+        const feedback = document.createElement('div');
+        feedback.className = 'quiz-feedback';
+
+        if (option.correct) {
+            feedback.textContent = 'Correct! Great job!';
+            quizContainer.appendChild(feedback);
+
+            currentQuestionIndex++;
+            setTimeout(() => {
+                showQuestion();
+            }, 1000);
+        } else {
+            feedback.textContent = 'Oops! Try again!';
+            quizContainer.appendChild(feedback);
+            setTimeout(() => {
+                feedback.remove();
+            }, 1000);
+        }
+    }
+
+    function showCongratulations() {
+        const quizContainer = document.getElementById('quiz-container');
+        quizContainer.innerHTML = '';
+
+        const congratsElement = document.createElement('div');
+        congratsElement.className = 'congratulations';
+
+        const congratsMessage = document.createElement('h2');
+        congratsMessage.textContent = 'Congratulations! You completed the Climate Contest!';
+
+        const congratsImage = document.createElement('img');
+        congratsImage.src = 'https://bmcdn.nl/assets/weather-icons/v3.0/fill/svg/rainbow-clear.svg'; // Example image URL
+        congratsImage.alt = 'Congratulations';
+
+        congratsElement.appendChild(congratsMessage);
+        congratsElement.appendChild(congratsImage);
+
+        quizContainer.appendChild(congratsElement);
+    }
+
+    // Start the quiz
+    showQuestion();
+</script>
 </body>
 
 </html>
