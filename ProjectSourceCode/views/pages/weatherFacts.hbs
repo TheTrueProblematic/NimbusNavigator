@@ -1,34 +1,361 @@
 <!DOCTYPE html>
 <html>
 
-{{> message}}
-
 <head>
+    <title>Weather Facts</title>
     <style>
         body {
             background-color: #73bdca;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            margin: 0;
+            padding: 0;
         }
 
-        .weather-container {
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
             text-align: center;
+        }
+
+        .fact-container {
             background-color: #95ced8;
             border-radius: 15px;
-            padding: 20px;
+            padding: 30px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            margin-top: 20px;
+            margin-top: 50px;
+        }
+
+        .fact-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .fact-text {
+            font-size: 22px;
+            margin-bottom: 30px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .fact-button {
+            background-color: #ffcc00;
+            border: none;
+            padding: 15px 25px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: #000;
+        }
+
+        .fact-button:hover {
+            background-color: #ffdd33;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h2 class="mt-4 mb-4 text-center">Weather Facts!</h2>
-        <div class="weather-container">
-            <div class="weather-info">
-                <p>So many FACTS!</p>
-            </div>
+<div class="container">
+    <h2 class="mt-4 mb-4">Weather Facts!</h2>
+    <div class="fact-container">
+        <div class="fact-title" id="fact-title">
+            <!-- Title will be displayed here -->
+        </div>
+        <div class="fact-text" id="fact-text">
+            <!-- Fact will be displayed here -->
+        </div>
+        <div class="button-group">
+            <button class="fact-button" id="new-fact-button">New Fact!</button>
+            <button class="fact-button" id="learn-more-button">Learn More!</button>
         </div>
     </div>
+</div>
+
+<script>
+    const facts = [
+        {
+            title: "Cricket Chirps and Temperature",
+            fact: "You can estimate the temperature by counting a cricket's chirps.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Sandstorms' Reach",
+            fact: "Sandstorms can engulf entire cities, reducing visibility to near zero.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Black Blizzards",
+            fact: "Dirt mixed with wind can create dust storms known as black blizzards.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Mudslide Power",
+            fact: "Mudslides can carry rocks, trees, vehicles, and even entire buildings.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Record Cold Temperature",
+            fact: "The coldest temperature ever officially recorded was -89.2°C (-128.6°F) in Antarctica.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Spiders and Weather",
+            fact: "Mild autumn weather often leads to larger spiders entering homes.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Heatwave Effects on Railways",
+            fact: "Extreme heat can cause train tracks to bend.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Thunderstorm Frequency",
+            fact: "Approximately 2,000 thunderstorms occur on Earth every minute.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Grapes to Raisins",
+            fact: "A 2003 heatwave turned grapes into raisins before they were harvested.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Volcanic Lightning",
+            fact: "Lightning often accompanies volcanic eruptions.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Raindrop Size and Speed",
+            fact: "Raindrops can be as large as a housefly and fall at speeds over 30 km/h (18.6 mph).",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Windiest Place on Earth",
+            fact: "Cape Farewell in Greenland is the windiest place on the planet.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Hurricane Storm Surges",
+            fact: "Hurricanes can push more than 6 meters (20 feet) of water ashore.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Blood Rain",
+            fact: "In July 2001, rainfall in Kerala, India, was blood red due to airborne spores.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Blizzard Impact",
+            fact: "Blizzards can make snowflakes feel like pellets hitting your face.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Escaped Pythons",
+            fact: "A hurricane in Florida caused 900 captive pythons to escape.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Worms and Floods",
+            fact: "Worms wriggle up from underground when a flood is imminent.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Thunderstorm Winds",
+            fact: "A thunderstorm can produce winds exceeding 160 km/h (99 mph).",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Antarctic Snowfall",
+            fact: "In Antarctica, snow can fall so heavily that visibility is reduced to zero.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Whiteout Effects",
+            fact: "A whiteout can cause disorientation and nausea.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Fire Whirls",
+            fact: "Wildfires can create tornadoes made of fire, known as fire whirls.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Historic Blizzard",
+            fact: "In 1972, a blizzard dumped 8 meters (26 feet) of snow on Iran, burying 200 villages.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Tornado Speed",
+            fact: "Some tornadoes can be faster than Formula One racing cars.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Black Ice Hazard",
+            fact: "Black ice, a transparent coating of ice on surfaces, can make pavements extremely slippery.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Frogs Predict Rain",
+            fact: "Some frogs become noisier just before it rains.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Buried Soldiers",
+            fact: "In 525 BC, a sandstorm buried hundreds of soldiers in an Egyptian desert.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Raining Animals",
+            fact: "Waterspouts can cause sea creatures to rain down from the sky.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Costly Hailstorm",
+            fact: "In 1995, hailstones larger than cricket balls fell in Texas, causing significant damage.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Frozen Thames",
+            fact: "In 1684, the River Thames froze solid for two months.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Animals Sense Tornadoes",
+            fact: "Cats and dogs have been known to sense when a tornado is approaching.",
+            source: "https://www.natgeokids.com/uk/discover/geography/physical-geography/30-freaky-facts-about-weather/"
+        },
+        {
+            title: "Snowflake Uniqueness",
+            fact: "Every snowflake has a unique shape, making each one special.",
+            source: "https://www.sciencekids.co.nz/sciencefacts/weather.html"
+        },
+        {
+            title: "Rainbow Formation",
+            fact: "Rainbows appear when sunlight passes through raindrops, splitting into different colors.",
+            source: "https://www.sciencekids.co.nz/sciencefacts/weather.html"
+        },
+        {
+            title: "Cloud Weight",
+            fact: "A typical cumulus cloud can weigh as much as 100 elephants!",
+            source: "https://www.sciencekids.co.nz/sciencefacts/weather.html"
+        },
+        {
+            title: "Lightning Speed",
+            fact: "Lightning travels at speeds of up to 200,000 miles per hour.",
+            source: "https://www.sciencekids.co.nz/sciencefacts/weather.html"
+        },
+        {
+            title: "Hailstone Sizes",
+            fact: "Hailstones can be as small as peas or as large as grapefruits.",
+            source: "https://www.sciencekids.co.nz/sciencefacts/weather.html"
+        },
+        {
+            title: "Fog as a Cloud",
+            fact: "Fog is essentially a cloud that forms close to the ground.",
+            source: "https://www.sciencekids.co.nz/sciencefacts/weather.html"
+        },
+        {
+            title: "Sun Halo",
+            fact: "Sometimes, a ring or halo appears around the sun, caused by ice crystals in the atmosphere.",
+            source: "https://www.sciencekids.co.nz/sciencefacts/weather.html"
+        },
+        {
+            title: "Snowfall in the Sahara",
+            fact: "The Sahara Desert, known for its heat, has experienced snowfall!",
+            source: "https://www.sciencekids.co.nz/sciencefacts/weather.html"
+        },
+        {
+            title: "Fish Rain",
+            fact: "Tornadoes over water, called waterspouts, can lift fish and make them rain down on land.",
+            source: "https://www.sciencekids.co.nz/sciencefacts/weather.html"
+        },
+        {
+            title: "Colorful Sunsets",
+            fact: "Dust and pollution can make sunsets appear more vibrant and colorful.",
+            source: "https://www.sciencekids.co.nz/sciencefacts/weather.html"
+        },
+        {
+            title: "Snowfall in Hawaii",
+            fact: "Some of Hawaii's tallest volcanoes receive snow during winter months.",
+            source: "https://www.sciencekids.co.nz/sciencefacts/weather.html"
+        },
+        {
+            title: "Thundersnow",
+            fact: "It's possible to have a thunderstorm with snow instead of rain, known as thundersnow.",
+            source: "https://www.sciencekids.co.nz/sciencefacts/weather.html"
+        },
+        {
+            title: "Green Flash",
+            fact: "Occasionally, a green flash can be seen just as the sun sets or rises, caused by atmospheric refraction.",
+            source: "https://www.sciencekids.co.nz/sciencefacts/weather.html"
+        },
+        {
+            title: "Moonbows",
+            fact: "Rainbows can occur at night and are called moonbows; they're rarer and fainter than daytime rainbows.",
+            source: "https://www.sciencekids.co.nz/sciencefacts/weather.html"
+        },
+        {
+            title: "Snow Donuts",
+            fact: "Under specific conditions, rolling snow can form natural snow donuts or 'snow rollers.'",
+            source: "https://www.sciencekids.co.nz/sciencefacts/weather.html"
+        },
+        {
+            title: "Ball Lightning",
+            fact: "A rare phenomenon where lightning appears as a glowing, floating ball.",
+            source: "https://www.sciencekids.co.nz/sciencefacts/weather.html"
+        },
+        {
+            title: "Red Sky at Night",
+            fact: "The saying 'Red sky at night, sailor's delight' suggests that a red sunset indicates good weather ahead.",
+            source: "https://www.sciencekids.co.nz/sciencefacts/weather.html"
+        },
+        {
+            title: "Auroras",
+            fact: "The Northern and Southern Lights are natural light displays in the sky, caused by solar wind interacting with Earth's atmosphere.",
+            source: "https://www.sciencekids.co.nz/sciencefacts/weather.html"
+        },
+        {
+            title: "Dust Devils",
+            fact: "Small, harmless whirlwinds that pick up dust and debris, often seen in deserts.",
+            source: "https://www.sciencekids.co.nz/sciencefacts/weather.html"
+        },
+        {
+            title: "Mammatus Clouds",
+            fact: "These clouds have a pouch-like appearance and often form after a thunderstorm.",
+            source: "https://www.sciencekids.co.nz/sciencefacts/weather.html"
+        }
+    ];
+
+    let currentFactIndex = -1;
+
+    function showRandomFact() {
+        let randomIndex;
+        do {
+            randomIndex = Math.floor(Math.random() * facts.length);
+        } while (randomIndex === currentFactIndex);
+
+        currentFactIndex = randomIndex;
+        const fact = facts[currentFactIndex];
+        document.getElementById('fact-title').textContent = fact.title;
+        document.getElementById('fact-text').textContent = fact.fact;
+    }
+
+    function learnMore() {
+        const fact = facts[currentFactIndex];
+        window.open(fact.source, '_blank');
+    }
+
+    document.getElementById('new-fact-button').addEventListener('click', showRandomFact);
+    document.getElementById('learn-more-button').addEventListener('click', learnMore);
+
+    // Show a fact when the page loads
+    showRandomFact();
+</script>
 </body>
 
 </html>
