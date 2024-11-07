@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weekly Hourly Forecast</title>
+</head>
+<body>
+    <h1>Weekly Hourly Forecast</h1>
+
+    {{#each weeklyForecast as |hours dayName|}}
+        <h2>{{dayName}}</h2>
+        <table>
+            <tr>
+                <th>Hour</th>
+                <th>Temperature</th>
+                <th>Forecast</th>
+            </tr>
+            {{#each hours}}
+                <tr>
+                    <td>{{hour}}:00</td>
+                    <td>{{temperature}} {{temperatureUnit}}</td>
+                    <td>{{shortForecast}}</td>
+                </tr>
+            {{/each}}
+        </table>
+    {{/each}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

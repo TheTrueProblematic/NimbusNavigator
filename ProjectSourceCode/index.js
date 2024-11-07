@@ -321,6 +321,33 @@ app.get('/climateContest', (req, res) => {
 app.get('/weatherFacts', (req, res) => {
     res.render('pages/weatherFacts');
 });
+app.get('/forecast', (req, res) => {
+    axios.get('https://api.weather.gov/gridpoints/BOU/53,65/forecast/hourly')
+        .then(response => {
+            const hourlyForecasts = response.data.properties.periods;
+
+            // Group data by day of the week
+            const weeklyForecast = hourlyForecasts.reduce((acc, forecast) => {
+                const dayName = new Date(forecast.startTime).toLocaleDateString('en-US', { weekday: 'long' });
+                if (!acc[dayName]) acc[dayName] = [];
+                acc[dayName].push({
+                    hour: new Date(forecast.startTime).getHours(),
+                    temperature: forecast.temperature,
+                    temperatureUnit: forecast.temperatureUnit,
+                    shortForecast: forecast.shortForecast,
+                });
+                return acc;
+            }, {});
+
+            // Pass to template
+            res.render('pages/forecast', { weeklyForecast });
+        })
+        .catch(error => {
+            console.error('Error fetching hourly forecast data:', error);
+            res.render('pages/forecast', { weeklyForecast: [], error: true });
+        });
+});
+
 
 // Starting the server and keeping the connection open to listen for more requests
 app.listen(3000);
