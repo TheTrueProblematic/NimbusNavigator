@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Current Weather for Boulder</title>
+    <title>Current Weather for {{zip}}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <style>
         /* Additional custom styles */
@@ -45,7 +45,7 @@
         }
 
         .left-bar {
-            background-color: #cfe9ff; 
+            background-color: #cfe9ff;
             padding: 20px;
             height: calc(100vh - 60px);
             position: fixed;
@@ -88,7 +88,7 @@
             background: linear-gradient(145deg, #a1c6ea, #74b0e0);
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-           
+
         }
 
         .card:hover {
@@ -111,7 +111,7 @@
         }
 
         .list-group-item {
-            background-color: #e4f2ff; 
+            background-color: #e4f2ff;
             border: 1px solid #a1c6ea;
             border-radius: 5px;
             padding: 10px;
@@ -127,170 +127,103 @@
 </head>
 
 <body>
-    <!-- Left vertical bar -->
-    <div class="left-bar">
-        <h2 class="card">{{currentConditions}} with a temperature of {{currentTemp}}°F</h2>
-        <img src="/fillerImages/{{imageName}}" alt="Weather Image">
-    </div>
+<!-- Left vertical bar -->
+<div class="left-bar">
+    <h2 class="card">{{currentConditions}} with a temperature of {{currentTemp}}°F</h2>
+    <h3>Hello {{name}} ({{username}}) from {{zip}}</h3>
+    <img src="/fillerImages/{{imageName}}" alt="Weather Image">
+</div>
 
-    <div class="top-bar">
-        {{!-- <div class="position-absolute top-0 end-0"></div> --}}
-        <h1>CURRENT WEATHER</h1>
-    </div>
-    </div>
+<div class="top-bar">
+    <!-- <div class="position-absolute top-0 end-0"></div> -->
+    <h1>CURRENT WEATHER</h1>
+</div>
 
-    <!-- Main content area -->
-    <div class="main-content">
-        <div class="card-grid">
-            <!-- Weather Card -->
-            <div class="card">
-                <h3>Weather</h3>
-                <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{weatherIcon}}"
-                    alt="Weather Icon" class="weather-icon">
-                <p>{{currentTemp}}°F</p>
-            </div>
+<!-- Main content area -->
+<div class="main-content">
+    <div class="card-grid">
+        <!-- Weather Card -->
+        <div class="card">
+            <h3>Weather</h3>
+            <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{weatherIcon}}"
+                 alt="Weather Icon" class="weather-icon">
+            <p>{{currentTemp}}°F</p>
+        </div>
 
-            <!-- Wind Card -->
-            <div class="card d-flex flex-row align-items-center wind-card" style="padding: 10px;">
+        <!-- Wind Card -->
+        <div class="card d-flex flex-row align-items-center wind-card" style="padding: 10px;">
 
-                <div>
-                    <h3>Wind</h3>
-                    {{#ifNotNA windSpeed}}
+            <div>
+                <h3>Wind</h3>
+                {{#ifNotNA windSpeed}}
                     <p><strong>Speed:</strong> {{windSpeed}} mph</p>
-                    {{/ifNotNA}}
-                    {{#ifNotNA windDirection}}
+                {{/ifNotNA}}
+                {{#ifNotNA windDirection}}
                     <p><strong>Direction:</strong> {{windDirection}}°</p>
-                    {{/ifNotNA}}
-                    {{#ifNotNA windChill}}
+                {{/ifNotNA}}
+                {{#ifNotNA windChill}}
                     <p><strong>Wind Chill:</strong> {{windChill}}</p>
-                    {{/ifNotNA}}
-                    {{#ifNotNA windGust}}
+                {{/ifNotNA}}
+                {{#ifNotNA windGust}}
                     <p><strong>Gust:</strong> {{windGust}} mph</p>
-                    {{/ifNotNA}}
-                </div>
-                <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{windIcon}}" alt="Wind Icon"
-                    class="weather-icon me-3">
+                {{/ifNotNA}}
             </div>
-
-            <!-- Moon Card -->
-            <div class="card">
-                <h3>Moon</h3>
-                <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{moonIcon}}"
-                    alt="Moon Phase Icon" class="weather-icon">
-            </div>
-
-            <div class="row">
-                <!-- Information Card -->
-                <div class="card">
-                    <h3>Information</h3>
-                    <ul class="list-group">
-                        {{#ifNotNA heatIndex}}
-                        <li class="list-group-item">Heat Index: {{heatIndex}}°F</li>
-                        {{/ifNotNA}}
-                        {{#ifNotNA humidity}}
-                        <li class="list-group-item">Humidity: {{humidity}}%</li>
-                        {{/ifNotNA}}
-                        {{#ifNotNA dewpoint}}
-                        <li class="list-group-item">Dew Point: {{dewpoint}}°F</li>
-                        {{/ifNotNA}}
-                        {{#ifNotNA barometricPressure}}
-                        <li class="list-group-item">Pressure: {{barometricPressure}} inHg</li>
-                        {{/ifNotNA}}
-                        {{#ifNotNA seaLevelPressure}}
-                        <li class="list-group-item">Sea Level Pressure: {{seaLevelPressure}} inHg</li>
-                        {{/ifNotNA}}
-                        {{#ifNotNA visibility}}
-                        <li class="list-group-item">Visibility: {{visibility}} miles</li>
-                        {{/ifNotNA}}
-                        {{#ifNotNA precipitation}}
-                        <li class="list-group-item">Precipitation: {{precipitation}} inches</li>
-                        {{/ifNotNA}}
-                        {{#ifNotNA precipitation3h}}
-                        <li class="list-group-item">Precipitation (3h): {{precipitation3h}} inches</li>
-                        {{/ifNotNA}}
-                        {{#ifNotNA precipitation6h}}
-                        <li class="list-group-item">Precipitation (6h): {{precipitation6h}} inches</li>
-                        {{/ifNotNA}}
-                        {{#ifNotNA maxTempPast24H}}
-                        <li class="list-group-item">Max Temp Last 24h: {{maxTempPast24H}}°F</li>
-                        {{/ifNotNA}}
-                        {{#ifNotNA minTempPast24H}}
-                        <li class="list-group-item">Min Temp Last 24h: {{minTempPast24H}}°F</li>
-                        {{/ifNotNA}}
-                    </ul>
-                </div>
-
-            </div>
+            <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{windIcon}}" alt="Wind Icon"
+                 class="weather-icon me-3">
         </div>
 
-        <!-- Commented out this: (not entirely sure what it is for) -->
+        <!-- Moon Card -->
+        <div class="card">
+            <h3>Moon</h3>
+            <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{moonIcon}}"
+                 alt="Moon Phase Icon" class="weather-icon">
+        </div>
 
-        {{!-- <div class="row row-cols-1 row-cols-md-6">
-            <div class="col">
-                <div class="small-card">
-                    <!-- Weather Card -->
-                    <h5>Weather</h5>
-                </div>
-            </div>
-            <div class="col">
-                <div class="small-card">
-                    <!-- Weather Card -->
-                    <h5>Weather</h5>
-                </div>
-            </div>
-            <div class="col">
-                <div class="small-card">
-                    <!-- Weather Card -->
-                    <h5>Weather</h5>
-                </div>
-            </div>
-            <div class="col">
-                <div class="small-card">
-                    <!-- Weather Card -->
-                    <h5>Weather</h5>
-                </div>
-            </div>
-            <div class="col">
-                <div class="small-card">
-                    <!-- Weather Card -->
-                    <h5>Weather</h5>
-                </div>
-            </div>
-            <div class="col">
-                <div class="small-card">
-                    <!-- Weather Card -->
-                    <h5>Weather</h5>
-                </div>
-            </div>
-            <div class="col">
-                <div class="small-card">
-                    <!-- Weather Card -->
-                    <h5>Weather</h5>
-                </div>
-            </div>
-
-        </div> --}}
-
-
-        <!-- Commented out 7-Day Forecast -->
-        <!--
-        <h3 class="mt-5">7-Day Forecast</h3>
         <div class="row">
-            {{#each temperatures}}
-            <div class="col-md-4 col-lg-3 mb-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">{{name}}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted"><strong>{{temperature}}°{{temperatureUnit}}</strong></h6>
-                        <p class="card-text">{{detailedForecast}}</p>
-                    </div>
-                </div>
+            <!-- Information Card -->
+            <div class="card">
+                <h3>Information</h3>
+                <ul class="list-group">
+                    {{#ifNotNA heatIndex}}
+                        <li class="list-group-item">Heat Index: {{heatIndex}}°F</li>
+                    {{/ifNotNA}}
+                    {{#ifNotNA humidity}}
+                        <li class="list-group-item">Humidity: {{humidity}}%</li>
+                    {{/ifNotNA}}
+                    {{#ifNotNA dewpoint}}
+                        <li class="list-group-item">Dew Point: {{dewpoint}}°F</li>
+                    {{/ifNotNA}}
+                    {{#ifNotNA barometricPressure}}
+                        <li class="list-group-item">Pressure: {{barometricPressure}} inHg</li>
+                    {{/ifNotNA}}
+                    {{#ifNotNA seaLevelPressure}}
+                        <li class="list-group-item">Sea Level Pressure: {{seaLevelPressure}} inHg</li>
+                    {{/ifNotNA}}
+                    {{#ifNotNA visibility}}
+                        <li class="list-group-item">Visibility: {{visibility}} miles</li>
+                    {{/ifNotNA}}
+                    {{#ifNotNA precipitation}}
+                        <li class="list-group-item">Precipitation: {{precipitation}} inches</li>
+                    {{/ifNotNA}}
+                    {{#ifNotNA precipitation3h}}
+                        <li class="list-group-item">Precipitation (3h): {{precipitation3h}} inches</li>
+                    {{/ifNotNA}}
+                    {{#ifNotNA precipitation6h}}
+                        <li class="list-group-item">Precipitation (6h): {{precipitation6h}} inches</li>
+                    {{/ifNotNA}}
+                    {{#ifNotNA maxTempPast24H}}
+                        <li class="list-group-item">Max Temp Last 24h: {{maxTempPast24H}}°F</li>
+                    {{/ifNotNA}}
+                    {{#ifNotNA minTempPast24H}}
+                        <li class="list-group-item">Min Temp Last 24h: {{minTempPast24H}}°F</li>
+                    {{/ifNotNA}}
+                </ul>
             </div>
-            {{/each}}
+
         </div>
-        -->
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

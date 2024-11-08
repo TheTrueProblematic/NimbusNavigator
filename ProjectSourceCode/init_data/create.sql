@@ -1,8 +1,11 @@
+DROP TABLE IF EXISTS users;
+
 CREATE TABLE users
 (
-    name     CHAR(50)    NOT NULL username VARCHAR(50) PRIMARY KEY,
+    name     CHAR(50)    NOT NULL,
+    username VARCHAR(50) PRIMARY KEY,
     zipcode  VARCHAR(5)  NOT NULL,
-    password VARCHAR(60) NOT NULL,
+    password VARCHAR(60) NOT NULL
 );
 
 -- Insert 50 fake users
@@ -61,4 +64,3 @@ VALUES ('John Doe', 'johndoe1@example.com', '12345', 'password123'),
 -- Verify the entries
 SELECT *
 FROM users;
-

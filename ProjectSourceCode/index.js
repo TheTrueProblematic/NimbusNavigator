@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session'); // To set the session object.
 const bcrypt = require('bcryptjs'); // To hash passwords
 const axios = require('axios'); // To make HTTP requests from our server.
+const zipcodes = require('zipcodes'); // For converting zip codes to latitude and longitude
 
 // Create `ExpressHandlebars` instance and configure the layouts and partials dir.
 const hbs = handlebars.create({
@@ -32,8 +33,6 @@ const dbConfig = {
     database: process.env.POSTGRES_DB, // The database name
     user: process.env.POSTGRES_USER, // The user account to connect with
     password: process.env.POSTGRES_PASSWORD, // The password of the user account
-    name: process.env.POSTGRES_NAME,
-    zip: process.env.POSTGRES_ZIP,
 };
 
 const db = pgp(dbConfig);
@@ -88,24 +87,23 @@ app.get('/register', (req, res) => {
 app.post('/register', async (req, res) => {
     try {
         // Hash the password using bcrypt library
-        var hash;
-        if (req.body.password===req.body.cpassword) {
-            hash = await bcrypt.hash(req.body.password, 10);
+        var hashy;
+        if (req.body.password === req.body.cpassword) {
+            hashy = await bcrypt.hash(req.body.password, 10);
         } else {
-            console.error('Passwords don\'t match:', error);
-            // Redirect back to register page
-            // res.redirect('/register');
+            console.error('Passwords do not match.');
+            return res.render('pages/register', { message: 'Passwords do not match.', error: true });
         }
+        const hash = hashy;
         // Insert username and hashed password into the 'users' table
-        const query = 'INSERT INTO users (name, email, zipcode, password) VALUES ($1, $2, $3, $4)';
+        const query = 'INSERT INTO users (name, username, zipcode, password) VALUES ($1, $2, $3, $4)';
         await db.none(query, [req.body.name, req.body.username, req.body.zip, hash]);
 
         // Redirect to login page
         res.redirect('/login');
     } catch (error) {
         console.error('Error inserting user:', error);
-        // Redirect back to register page
-        res.redirect('/register');
+        return res.render('pages/register', { message: error.message, error: true });
     }
 });
 
@@ -176,8 +174,22 @@ function getBeaufortNumber(windSpeedMph) {
 
 // GET /currentWeather - Display current weather and forecast
 app.get('/currentWeather', (req, res) => {
+    var zip = req.session.user.zipcode;
+    var name = req.session.user.name;
+    var username = req.session.user.username;
+
+    // Get latitude and longitude from zip code
+    const location = zipcodes.lookup(zip);
+
+    if (!location) {
+        return res.render('pages/currentWeather', { message: 'Invalid zip code.', error: true });
+    }
+
+    const latitude = location.latitude;
+    const longitude = location.longitude;
+
     axios({
-        url: 'https://api.weather.gov/points/40.0150,-105.2705',
+        url: `https://api.weather.gov/points/${latitude},${longitude}`,
         method: 'GET',
         headers: {
             'Accept-Encoding': 'application/json',
@@ -285,6 +297,9 @@ app.get('/currentWeather', (req, res) => {
                 heatIndex: heatIndexF !== null ? heatIndexF.toFixed(1) : 'N/A',
                 dewpoint: dewpointF !== null ? dewpointF.toFixed(1) : 'N/A',
                 todayForecast: todayForecast,
+                name: name,
+                username: username,
+                zip: zip,
             };
 
             // Determine which image to use based on today's forecast description
@@ -404,7 +419,17 @@ app.get('/weatherFacts', (req, res) => {
     res.render('pages/weatherFacts');
 });
 app.get('/forecast', (req, res) => {
-    axios.get('https://api.weather.gov/gridpoints/BOU/53,65/forecast/hourly')
+    var zip = req.session.user.zipcode;
+    const location = zipcodes.lookup(zip);
+
+    if (!location) {
+        return res.render('pages/forecast', { message: 'Invalid zip code.', error: true });
+    }
+
+    const latitude = location.latitude;
+    const longitude = location.longitude;
+
+    axios.get(`https://api.weather.gov/points/${latitude},${longitude}/forecast/hourly`)
         .then(response => {
             const hourlyForecasts = response.data.properties.periods;
 
@@ -429,7 +454,6 @@ app.get('/forecast', (req, res) => {
             res.render('pages/forecast', { weeklyForecast: [], error: true });
         });
 });
-
 
 // Starting the server and keeping the connection open to listen for more requests
 app.listen(3000);
