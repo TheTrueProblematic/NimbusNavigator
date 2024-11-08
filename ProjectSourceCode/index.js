@@ -32,6 +32,8 @@ const dbConfig = {
     database: process.env.POSTGRES_DB, // The database name
     user: process.env.POSTGRES_USER, // The user account to connect with
     password: process.env.POSTGRES_PASSWORD, // The password of the user account
+    name: process.env.POSTGRES_NAME,
+    zip: process.env.POSTGRES_ZIP,
 };
 
 const db = pgp(dbConfig);
@@ -86,11 +88,17 @@ app.get('/register', (req, res) => {
 app.post('/register', async (req, res) => {
     try {
         // Hash the password using bcrypt library
-        const hash = await bcrypt.hash(req.body.password, 10);
-
+        var hash;
+        if (req.body.password===req.body.cpassword) {
+            hash = await bcrypt.hash(req.body.password, 10);
+        } else {
+            console.error('Passwords don\'t match:', error);
+            // Redirect back to register page
+            // res.redirect('/register');
+        }
         // Insert username and hashed password into the 'users' table
-        const query = 'INSERT INTO users (username, password) VALUES ($1, $2)';
-        await db.none(query, [req.body.username, hash]);
+        const query = 'INSERT INTO users (name, email, zipcode, password) VALUES ($1, $2, $3, $4)';
+        await db.none(query, [req.body.name, req.body.username, req.body.zip, hash]);
 
         // Redirect to login page
         res.redirect('/login');
