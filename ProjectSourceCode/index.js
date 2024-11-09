@@ -423,6 +423,16 @@ app.get('/forecast', (req, res) => {
 });
 
 
+// lab-11 endpoints
+app.get('/welcome', (req, res) => {
+    res.json({status: 'success', message: 'Welcome!'});
+});
+
+
 // Starting the server and keeping the connection open to listen for more requests
-app.listen(3000);
+// app.listen(3000);
+
+// listen to correct port for lab 11
+module.exports = app.listen(3000);
+
 console.log('Server is listening on port 3000');
