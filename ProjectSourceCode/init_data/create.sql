@@ -9,7 +9,7 @@ CREATE TABLE users
 );
 
 -- Insert 50 fake users
-INSERT INTO users (name, email, zipcode, password)
+INSERT INTO users (name, username, zipcode, password)
 VALUES ('John Doe', 'johndoe1@example.com', '12345', 'password123'),
        ('Jane Smith', 'janesmith1@example.com', '54321', 'pass456'),
        ('Alice Johnson', 'alicejohnson@example.com', '67890', 'mysecretpass'),
