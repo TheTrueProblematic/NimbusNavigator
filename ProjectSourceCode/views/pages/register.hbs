@@ -82,12 +82,24 @@
     <h2 class="mt-4 mb-4">Register</h2>
     <form action="/register" method="POST">
         <div class="mb-3">
-            <label for="username" class="form-label">Username:</label>
+            <label for="name" class="form-label">Name:</label>
+            <input type="text" class="form-control" name="name" id="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="username" class="form-label">Email:</label>
             <input type="text" class="form-control" name="username" id="username" required>
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">Password:</label>
             <input type="password" class="form-control" name="password" id="password" required>
+        </div>
+        <div class="mb-3">
+            <label for="cpassword" class="form-label">Confirm Password:</label>
+            <input type="password" class="form-control" name="cpassword" id="cpassword" required>
+        </div>
+        <div class="mb-3">
+            <label for="zip" class="form-label">Zip Code:</label>
+            <input type="text" class="form-control" name="zip" id="zip" required>
         </div>
         <button type="submit" class="btn btn-primary">Register</button>
     </form>
