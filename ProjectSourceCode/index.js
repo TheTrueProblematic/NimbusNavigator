@@ -90,6 +90,7 @@ app.post('/register', async (req, res) => {
         var hashy;
         if (req.body.password === req.body.cpassword) {
             hashy = await bcrypt.hash(req.body.password, 10);
+            
         } else {
             console.error('Passwords do not match.');
             return res.render('pages/register', { message: 'Passwords do not match.', error: true });
