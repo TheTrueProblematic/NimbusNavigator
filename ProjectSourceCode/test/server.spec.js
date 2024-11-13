@@ -47,7 +47,7 @@ describe('Register:', () => {
      .end((err, res) => {
        // Here a redirect will trigger a 200 response
        expect(res).to.have.status(200);
-       // Varify that the redirect actually happened
+       // Verify that the redirect actually happened
        expect(res.redirects[0]).to.include('/login'); // Verify redirection to /login
        done();
      });
@@ -89,7 +89,10 @@ describe('Login:', () => {
        password: 'test'
      })
      .end((err, res) => {
-      // test logic here
+      // TODO: add response status
+
+      // Verify redirect to /currentWeather after successful login
+      expect(res.redirects[0]).to.include('/currentWeather'); 
       done();
    });
  });
