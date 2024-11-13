@@ -31,31 +31,80 @@ describe('Server!', () => {
 
 // ********************************************************************************
 
-// describe('Testing Add User API', () => {
- 
-//   // positive test case for user /login
-//   it('positive : /login', done => {
-//       chai
-//         .request(server)
-//         .post('/login')
-//         .send({email: 'johndoe1@example.com', password: 'password123'})
-//         .end((err, res) => {
-//           expect(res).to.have.status(200);
-//           expect(res.body.message).to.equals('Success');
-//           done();
-//         });
-//   });
-//   // negative test case for /login
-//   it('Negative : /login. Checking invalid email', done => {
-//         chai
-//           .request(server)
-//           .post('/login')
-//           .send({email: 'jame@example.com', password: 'jame'})
-//           .end((err, res) => {
-//             expect(res).to.have.status(400);
-//             expect(res.body.message).to.equals('Invalid email');
-//             done();
-//           });
-//   });
+describe('Register:', () => {
+  // positve case for register
+ it('positive : /register - registers a user successfully', (done) => {
+   chai
+     .request(server)
+     .post('/register')
+     .send({
+       name: 'test',
+       username: 'test@example.com',
+       zip: '80303',
+       password: 'testpassword',
+       cpassword: 'testpassword'
+     })
+     .end((err, res) => {
+       // Here a redirect will trigger a 200 response
+       expect(res).to.have.status(200);
+       // Varify that the redirect actually happened
+       expect(res.redirects[0]).to.include('/login'); // Verify redirection to /login
+       done();
+     });
+ });
 
-// });
+
+ // negative case for register, passwords don't match 
+ it('negative : /register - passwords do not match', (done) => {
+   chai
+     .request(server)
+     .post('/register')
+     .send({
+       name: 'test',
+       username: 'test@example.com',
+       zip: '80303',
+       password: 'testpassword',
+       cpassword: 'test'
+     })
+     .end((err, res) => {
+       // 200 response means that the page reloaded
+       expect(res).to.have.status(200);
+       // Confirm that passwords don't match
+       expect(res.text).to.include('Passwords do not match.'); // Verify the error message is rendered
+       done();
+     });
+ });
+
+});
+
+
+describe('Login:', () => {
+ // positive test case for /login
+ it('positive: /login - login successful', (done) => {
+   chai
+     .request(server)
+     .post('/login')
+     .send({
+       username: 'johndoe1@example.com', 
+       password: 'test'
+     })
+     .end((err, res) => {
+      // test logic here
+      done();
+   });
+ });
+
+ // negative test case for /login, incorrect poassword
+ it('Negative : /login. Checking invalid password', done => {
+   chai
+     .request(server)
+     .post('/login')
+     .send({username: 'johndoe1@example.com', password: 'thisisinvalid'})
+     .end((err, res) => {
+       expect(res).to.have.status(200);
+       expect(res.text).to.include('Incorrect username or password.');
+       done();
+     });
+ });
+
+});

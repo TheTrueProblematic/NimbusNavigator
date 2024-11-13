@@ -131,6 +131,7 @@ app.post('/login', async (req, res) => {
                 req.session.user = user;
                 req.session.save();
                 // Redirect to /currentWeather
+                console.log("Login success. Redirecting to /currentWeather ...");
                 res.redirect('/currentWeather');
             } else {
                 // Incorrect password
@@ -456,14 +457,13 @@ app.get('/forecast', (req, res) => {
         });
 });
 
-// Starting the server and keeping the connection open to listen for more requests
-// app.listen(3000);
-
+// endpoint for lab-11
 app.get('/welcome', (req, res) => {
     res.json({status: 'success', message: 'Welcome!'});
 });
 
-// listen to correct port for lab 11
+// start the server on port 3000 and export the 
+// server object for use in other files
 module.exports = app.listen(3000);
 
 console.log('Server is listening on port 3000');
