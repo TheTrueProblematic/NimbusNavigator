@@ -121,7 +121,8 @@ app.post('/login', async (req, res) => {
 
         if (!user) {
             // User not found, redirect to register
-            res.redirect('/register');
+            // res.redirect('/register');
+            res.render('pages/login', { message: 'Incorrect username or password.', error: true });
         } else {
             // Compare password
             const match = await bcrypt.compare(req.body.password, user.password);
