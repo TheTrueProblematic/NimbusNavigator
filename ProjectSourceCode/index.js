@@ -121,7 +121,6 @@ app.post('/login', async (req, res) => {
 
         if (!user) {
             // User not found, redirect to register
-            // res.redirect('/register');
             res.render('pages/login', { message: 'Incorrect username or password.', error: true });
         } else {
             // Compare password
@@ -171,6 +170,26 @@ function getBeaufortNumber(windSpeedMph) {
     if (windSpeedMph >= 64 && windSpeedMph <= 72) return 11;
     if (windSpeedMph >= 73) return 12;
     return 0; // Default to 0 if no match
+}
+
+// Function to convert wind speed to m/s based on unit code
+function convertWindSpeedToMps(value, unitCode) {
+    if (value === null || unitCode === null) {
+        return null;
+    }
+
+    if (unitCode.endsWith('m_s-1')) {
+        return value; // Already in m/s
+    } else if (unitCode.endsWith('km_h-1')) {
+        return value / 3.6; // Convert km/h to m/s
+    } else if (unitCode.endsWith('kn')) {
+        return value * 0.514444; // Convert knots to m/s
+    } else if (unitCode.endsWith('mi_h-1')) {
+        return value * 0.44704; // Convert mph to m/s
+    } else {
+        console.warn('Unknown wind speed unit:', unitCode);
+        return null;
+    }
 }
 
 // GET /currentWeather - Display current weather and forecast
@@ -241,12 +260,29 @@ app.get('/currentWeather', (req, res) => {
             const currentTempC = props.temperature.value;
             const currentConditions = props.textDescription;
 
-            const windSpeedMps = props.windSpeed.value; // m/s
+            // Extract wind speed value and unit code
+            const windSpeedValue = props.windSpeed.value;
+            const windSpeedUnitCode = props.windSpeed.unitCode;
+            const windSpeedMps = convertWindSpeedToMps(windSpeedValue, windSpeedUnitCode);
+
+            // Extract wind gust value and unit code
+            const windGustValue = props.windGust.value;
+            const windGustUnitCode = props.windGust.unitCode;
+            const windGustMps = convertWindSpeedToMps(windGustValue, windGustUnitCode);
+
+            // Extract barometric pressure value and unit code
+            const barometricPressureValue = props.barometricPressure.value;
+            const barometricPressureUnitCode = props.barometricPressure.unitCode;
+
+            // Extract sea level pressure value and unit code
+            const seaLevelPressureValue = props.seaLevelPressure.value;
+            const seaLevelPressureUnitCode = props.seaLevelPressure.unitCode;
+
+            // Extract visibility value and unit code
+            const visibilityValue = props.visibility.value;
+            const visibilityUnitCode = props.visibility.unitCode;
+
             const windDirection = props.windDirection.value; // degrees
-            const windGustMps = props.windGust.value; // m/s
-            const barometricPressurePa = props.barometricPressure.value; // Pa
-            const seaLevelPressurePa = props.seaLevelPressure.value; // Pa
-            const visibilityMeters = props.visibility.value; // meters
             const maxTempPast24HC = props.maxTemperatureLast24Hours.value; // C
             const minTempPast24HC = props.minTemperatureLast24Hours.value; // C
             const precipitationLastHourMm = props.precipitationLastHour.value; // mm
@@ -267,9 +303,37 @@ app.get('/currentWeather', (req, res) => {
 
             const windSpeedMph = windSpeedMps !== null ? windSpeedMps * 2.23694 : null;
             const windGustMph = windGustMps !== null ? windGustMps * 2.23694 : null;
-            const barometricPressureInHg = barometricPressurePa !== null ? barometricPressurePa * 0.0002953 : null;
-            const seaLevelPressureInHg = seaLevelPressurePa !== null ? seaLevelPressurePa * 0.0002953 : null;
-            const visibilityMiles = visibilityMeters !== null ? visibilityMeters / 1609.34 : null;
+
+            // Convert barometric pressure to inches of mercury if unit is in Pascals
+            let barometricPressureInHg = null;
+            if (barometricPressureValue !== null && barometricPressureUnitCode) {
+                if (barometricPressureUnitCode.endsWith('Pa')) {
+                    barometricPressureInHg = barometricPressureValue * 0.0002953;
+                } else {
+                    console.warn('Unknown barometric pressure unit:', barometricPressureUnitCode);
+                }
+            }
+
+            // Convert sea level pressure to inches of mercury if unit is in Pascals
+            let seaLevelPressureInHg = null;
+            if (seaLevelPressureValue !== null && seaLevelPressureUnitCode) {
+                if (seaLevelPressureUnitCode.endsWith('Pa')) {
+                    seaLevelPressureInHg = seaLevelPressureValue * 0.0002953;
+                } else {
+                    console.warn('Unknown sea level pressure unit:', seaLevelPressureUnitCode);
+                }
+            }
+
+            // Convert visibility to miles if unit is in meters
+            let visibilityMiles = null;
+            if (visibilityValue !== null && visibilityUnitCode) {
+                if (visibilityUnitCode.endsWith('m')) {
+                    visibilityMiles = visibilityValue / 1609.34;
+                } else {
+                    console.warn('Unknown visibility unit:', visibilityUnitCode);
+                }
+            }
+
             const precipitationInches =
                 precipitationLastHourMm !== null ? precipitationLastHourMm / 25.4 : 0.00;
             const precipitation3hInches =
@@ -301,6 +365,7 @@ app.get('/currentWeather', (req, res) => {
                 name: name,
                 username: username,
                 zip: zip,
+                moonPhaseString: "test",
             };
 
             // Determine which image to use based on today's forecast description
@@ -368,6 +433,8 @@ app.get('/currentWeather', (req, res) => {
         .then(([templateData, moonResponse]) => {
             const moonData = moonResponse.data[0];
             const moonPhase = moonData.Phase.toLowerCase();
+            const moonPhaseNorm = moonData.Phase;
+
 
             // Map moon phases to icons
             const moonPhases = {
@@ -390,6 +457,7 @@ app.get('/currentWeather', (req, res) => {
             }
 
             templateData.moonIcon = moonIcon;
+            templateData.moonPhaseString = moonPhaseNorm;
 
             // Determine wind icon based on wind speed using Beaufort scale
             const windSpeedMph = parseFloat(templateData.windSpeed);
