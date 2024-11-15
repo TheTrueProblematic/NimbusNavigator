@@ -92,7 +92,7 @@ app.post('/register', async (req, res) => {
             hashy = await bcrypt.hash(req.body.password, 10);
         } else {
             console.error('Passwords do not match.');
-            return res.render('pages/register', { message: 'Passwords do not match.', error: true });
+            return res.render('pages/register', {message: 'Passwords do not match.', error: true});
         }
         const hash = hashy;
         // Insert username and hashed password into the 'users' table
@@ -103,7 +103,7 @@ app.post('/register', async (req, res) => {
         res.redirect('/login');
     } catch (error) {
         console.error('Error inserting user:', error);
-        return res.render('pages/register', { message: error.message, error: true });
+        return res.render('pages/register', {message: error.message, error: true});
     }
 });
 
@@ -121,7 +121,7 @@ app.post('/login', async (req, res) => {
 
         if (!user) {
             // User not found, redirect to register
-            res.render('pages/login', { message: 'Incorrect username or password.', error: true });
+            res.render('pages/login', {message: 'Incorrect username or password.', error: true});
         } else {
             // Compare password
             const match = await bcrypt.compare(req.body.password, user.password);
@@ -133,12 +133,12 @@ app.post('/login', async (req, res) => {
                 res.redirect('/currentWeather');
             } else {
                 // Incorrect password
-                res.render('pages/login', { message: 'Incorrect username or password.', error: true });
+                res.render('pages/login', {message: 'Incorrect username or password.', error: true});
             }
         }
     } catch (error) {
         console.error('Error during login:', error);
-        res.render('pages/login', { message: 'An error occurred.', error: true });
+        res.render('pages/login', {message: 'An error occurred.', error: true});
     }
 });
 
@@ -202,7 +202,7 @@ app.get('/currentWeather', (req, res) => {
     const location = zipcodes.lookup(zip);
 
     if (!location) {
-        return res.render('pages/currentWeather', { message: 'Invalid zip code.', error: true });
+        return res.render('pages/currentWeather', {message: 'Invalid zip code.', error: true});
     }
 
     const latitude = location.latitude;
@@ -389,23 +389,23 @@ app.get('/currentWeather', (req, res) => {
             // Determine which weather icon to use based on current conditions
             // Map conditions to icons
             const weatherIcons = [
-                { keywords: ['clear', 'sunny'], icon: 'clear-day.svg' },
-                { keywords: ['cloudy'], icon: 'cloudy.svg' },
-                { keywords: ['overcast'], icon: 'overcast.svg' },
-                { keywords: ['drizzle'], icon: 'drizzle.svg' },
-                { keywords: ['hail'], icon: 'hail.svg' },
-                { keywords: ['rain'], icon: 'rain.svg' },
-                { keywords: ['sleet'], icon: 'sleet.svg' },
-                { keywords: ['smoke'], icon: 'smoke.svg' },
-                { keywords: ['snow'], icon: 'snow.svg' },
-                { keywords: ['mist'], icon: 'mist.svg' },
-                { keywords: ['hurricane'], icon: 'hurricane.svg' },
-                { keywords: ['tornado'], icon: 'tornado.svg' },
-                { keywords: ['wind'], icon: 'wind.svg' },
-                { keywords: ['dust'], icon: 'dust.svg' },
-                { keywords: ['thunderstorms', 'thunderstorm'], icon: 'thunderstorms.svg' },
-                { keywords: ['fog'], icon: 'fog.svg' },
-                { keywords: ['haze'], icon: 'haze.svg' },
+                {keywords: ['clear', 'sunny'], icon: 'clear-day.svg'},
+                {keywords: ['cloudy'], icon: 'cloudy.svg'},
+                {keywords: ['overcast'], icon: 'overcast.svg'},
+                {keywords: ['drizzle'], icon: 'drizzle.svg'},
+                {keywords: ['hail'], icon: 'hail.svg'},
+                {keywords: ['rain'], icon: 'rain.svg'},
+                {keywords: ['sleet'], icon: 'sleet.svg'},
+                {keywords: ['smoke'], icon: 'smoke.svg'},
+                {keywords: ['snow'], icon: 'snow.svg'},
+                {keywords: ['mist'], icon: 'mist.svg'},
+                {keywords: ['hurricane'], icon: 'hurricane.svg'},
+                {keywords: ['tornado'], icon: 'tornado.svg'},
+                {keywords: ['wind'], icon: 'wind.svg'},
+                {keywords: ['dust'], icon: 'dust.svg'},
+                {keywords: ['thunderstorms', 'thunderstorm'], icon: 'thunderstorms.svg'},
+                {keywords: ['fog'], icon: 'fog.svg'},
+                {keywords: ['haze'], icon: 'haze.svg'},
                 // Add more mappings as needed
             ];
 
@@ -470,14 +470,14 @@ app.get('/currentWeather', (req, res) => {
         })
         .catch(error => {
             console.error('Error fetching data:', error);
-            res.render('pages/currentWeather', { temperatures: [], message: 'Error fetching data', error: true });
+            res.render('pages/currentWeather', {temperatures: [], message: 'Error fetching data', error: true});
         });
 });
 
 // GET /logout - Log the user out
 app.get('/logout', (req, res) => {
     req.session.destroy();
-    res.render('pages/logout', { message: 'Logged out Successfully' });
+    res.render('pages/logout', {message: 'Logged out Successfully'});
 });
 
 // NIMBUSNAV ROUTES
@@ -492,7 +492,7 @@ app.get('/forecast', (req, res) => {
     const location = zipcodes.lookup(zip);
 
     if (!location) {
-        return res.render('pages/forecast', { message: 'Invalid zip code.', error: true });
+        return res.render('pages/forecast', {message: 'Invalid zip code.', error: true});
     }
 
     const latitude = location.latitude;
@@ -504,7 +504,7 @@ app.get('/forecast', (req, res) => {
 
             // Group data by day of the week
             const weeklyForecast = hourlyForecasts.reduce((acc, forecast) => {
-                const dayName = new Date(forecast.startTime).toLocaleDateString('en-US', { weekday: 'long' });
+                const dayName = new Date(forecast.startTime).toLocaleDateString('en-US', {weekday: 'long'});
                 if (!acc[dayName]) acc[dayName] = [];
                 acc[dayName].push({
                     hour: new Date(forecast.startTime).getHours(),
@@ -516,11 +516,11 @@ app.get('/forecast', (req, res) => {
             }, {});
 
             // Pass to template
-            res.render('pages/forecast', { weeklyForecast });
+            res.render('pages/forecast', {weeklyForecast});
         })
         .catch(error => {
             console.error('Error fetching hourly forecast data:', error);
-            res.render('pages/forecast', { weeklyForecast: [], error: true });
+            res.render('pages/forecast', {weeklyForecast: [], error: true});
         });
 });
 
