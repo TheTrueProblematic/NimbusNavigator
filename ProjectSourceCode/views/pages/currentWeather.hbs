@@ -21,13 +21,28 @@
             top: 0;
             width: 100%;
             height: 60px;
-            background-color: #a1c6ea;
+            background-color: #3f6d9b;
             border-bottom: 2px solid #a1c6ea;
             box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
             /* on top */
             z-index: 1000;
         }
-
+        .navbar li a{
+            display: block;
+            color: #ffffff;
+        }
+        .navbar .nav-link {
+            color: #ffffff;
+            display: block;
+            /* Change this to a different color if desired */
+            text-decoration: none;
+            padding: 10px 15px;
+        }
+         .navbar .nav-link:hover {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #a1c6ea;
+        }
         .top-bar {
             background-color: #ffffff;
             padding: 20px;
@@ -175,6 +190,7 @@
         <!-- Moon Card -->
         <div class="card">
             <h3>Moon</h3>
+            <p></p>
             <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{moonIcon}}"
                  alt="Moon Phase Icon" class="weather-icon">
         </div>
