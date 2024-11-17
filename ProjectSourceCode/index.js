@@ -523,6 +523,42 @@ app.get('/forecast', (req, res) => {
             res.render('pages/forecast', {weeklyForecast: [], error: true});
         });
 });
+app.get('/weeklyForecast', (req, res) => {
+    var zip = req.session.user.zipcode;
+    const location = zipcodes.lookup(zip);
+
+    if (!location) {
+        return res.render('pages/weeklyForecast', {message: 'Invalid zip code.', error: true});
+    }
+
+    const latitude = location.latitude;
+    const longitude = location.longitude;
+
+    axios.get(`https://api.weather.gov/points/${latitude},${longitude}/forecast/hourly`)
+        .then(response => {
+            const hourlyForecasts = response.data.properties.periods;
+
+            // Group data by day of the week
+            const weeklyForecast = hourlyForecasts.reduce((acc, forecast) => {
+                const dayName = new Date(forecast.startTime).toLocaleDateString('en-US', {weekday: 'long'});
+                if (!acc[dayName]) acc[dayName] = [];
+                acc[dayName].push({
+                    hour: new Date(forecast.startTime).getHours(),
+                    temperature: forecast.temperature,
+                    temperatureUnit: forecast.temperatureUnit,
+                    shortForecast: forecast.shortForecast,
+                });
+                return acc;
+            }, {});
+
+            // Pass to template
+            res.render('pages/weeklyForecast', {weeklyForecast});
+        })
+        .catch(error => {
+            console.error('Error fetching hourly weeklyForecast data:', error);
+            res.render('pages/weeklyForecast', {weeklyForecast: [], error: true});
+        });
+});
 
 // Starting the server and keeping the connection open to listen for more requests
 app.listen(3000);

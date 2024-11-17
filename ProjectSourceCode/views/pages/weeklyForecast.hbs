@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Weather Forecast</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #666576;
+            background-color: #c8c7be;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 60px;
+            background-color: #666576;
+            border-bottom: 2px solid #c8c7be !important;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            color: #0d1a12 !important;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px;
+            background-color: #9dafb5;
+            color: white;
+            margin: 60px 0 0 0;
+            font-size: 32px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .forecast-table {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background-color: #b5a6b8;
+            padding: 10px;
+        }
+
+        .forecast-day {
+            background: linear-gradient(145deg, #FFFFFF, #ece7ed);
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #666576;
+            display: flex;
+            flex-direction: column;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(181, 166, 184, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .forecast-day:hover {
+            background: linear-gradient(145deg, #ece7ed, #FFFFFF);
+            transform: scale(1.05);
+            box-shadow: 0 8px 12px rgba(181, 166, 184, 0.4);
+        }
+
+        .day-header {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+            background-color: #666576;
+            color: white;
+            padding: 5px 0;
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .weather-details {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .weather-item {
+            font-size: 14px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #9dafb5;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Weekly Weather Forecast</h1>
+
+    <div class="forecast-table">
+        <div class="forecast-day">
+            <div class="day-header">Monday</div>
+            <div class="weather-details">
+                <div class="weather-item">🌞 75°F / 55°F</div>
+                <div class="weather-item">Sunny</div>
+                <div class="weather-item">Wind: 5 mph</div>
+                <div class="weather-item">FILLER</div>
+                <div class="weather-item">FILLER</div>
+                <div class="weather-item">FILLER</div>
+            </div>
+        </div>
+        <div class="forecast-day">
+            <div class="day-header">Tuesday</div>
+            <div class="weather-details">
+                <div class="weather-item">🌦️ 68°F / 50°F</div>
+                <div class="weather-item">Partly Cloudy</div>
+                <div class="weather-item">Wind: 8 mph</div>
+                <div class="weather-item">FILLER</div>
+                <div class="weather-item">FILLER</div>
+                <div class="weather-item">FILLER</div>
+            </div>
+        </div>
+        <div class="forecast-day">
+            <div class="day-header">Wednesday</div>
+            <div class="weather-details">
+                <div class="weather-item">🌧️ 60°F / 48°F</div>
+                <div class="weather-item">Rainy</div>
+                <div class="weather-item">Wind: 10 mph</div>
+                <div class="weather-item">FILLER</div>
+                <div class="weather-item">FILLER</div>
+                <div class="weather-item">FILLER</div>
+            </div>
+        </div>
+        <div class="forecast-day">
+            <div class="day-header">Thursday</div>
+            <div class="weather-details">
+                <div class="weather-item">☁️ 65°F / 50°F</div>
+                <div class="weather-item">Cloudy</div>
+                <div class="weather-item">Wind: 7 mph</div>
+                <div class="weather-item">FILLER</div>
+                <div class="weather-item">FILLER</div>
+                <div class="weather-item">FILLER</div>
+            </div>
+        </div>
+        <div class="forecast-day">
+            <div class="day-header">Friday</div>
+            <div class="weather-details">
+                <div class="weather-item">🌞 70°F / 52°F</div>
+                <div class="weather-item">Sunny</div>
+                <div class="weather-item">Wind: 6 mph</div>
+                <div class="weather-item">FILLER</div>
+                <div class="weather-item">FILLER</div>
+                <div class="weather-item">FILLER</div>
+            </div>
+        </div>
+        <div class="forecast-day">
+            <div class="day-header">Saturday</div>
+            <div class="weather-details">
+                <div class="weather-item">🌤️ 72°F / 54°F</div>
+                <div class="weather-item">Partly Sunny</div>
+                <div class="weather-item">Wind: 4 mph</div>
+                <div class="weather-item">FILLER</div>
+                <div class="weather-item">FILLER</div>
+                <div class="weather-item">FILLER</div>
+            </div>
+        </div>
+        <div class="forecast-day">
+            <div class="day-header">Sunday</div>
+            <div class="weather-details">
+                <div class="weather-item">🌦️ 68°F / 53°F</div>
+                <div class="weather-item">Showers</div>
+                <div class="weather-item">Wind: 9 mph</div>
+                <div class="weather-item">FILLER</div>
+                <div class="weather-item">FILLER</div>
+                <div class="weather-item">FILLER</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
