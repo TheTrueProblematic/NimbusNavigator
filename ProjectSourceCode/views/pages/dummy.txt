@@ -1,0 +1,8 @@
+
+small default:
+            font-family: 'Poppins', sans-serif;
+Header:
+            font-family: 'Playfair Display', serif;
+small head:
+            font-family: 'Poppins', sans-serif;
+            font-weight: bold;

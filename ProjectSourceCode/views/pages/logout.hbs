@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logged Out</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.2/css/bootstrap.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+
         .navbar {
             height: 60px;
             background-color: rgb(226, 226, 138);
             z-index: -1;
             opacity: 0;
         }
+
         body {
             background: linear-gradient(135deg, #566c82, #8a5aa0);
             font-family: Arial, sans-serif;
@@ -22,6 +26,7 @@
             height: 100vh;
             margin: 0;
         }
+
         .container {
             max-width: 400px;
             border-radius: 20px;
@@ -30,13 +35,19 @@
             text-align: center;
             background: linear-gradient(135deg, #b4ccd8, #ccdae2);
         }
+
         h2 {
             color: #3f2c8a;
             margin-bottom: 20px;
+
         }
+
         p {
             color: #3f2c8a;
+            font-family: 'Poppins', sans-serif;
+            font-weight: bold;
         }
+
         .btn-primary {
             border-radius: 30px;
             background: linear-gradient(135deg, #666576, #6b7386);
@@ -45,11 +56,17 @@
             font-size: 16px;
             transition: background 0.3s;
         }
+
         .btn-primary:hover {
             background: linear-gradient(135deg, #6b7386, #666576);
         }
+
+        a {
+            font-family: 'Poppins', sans-serif !important;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h2>Logged out successfully!</h2>
@@ -59,4 +76,5 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

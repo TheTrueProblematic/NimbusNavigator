@@ -2,26 +2,32 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.2/css/bootstrap.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+
         .nav-link {
             transition: font-weight 0.3s, font-size 0.3s, color 0.3s;
         }
+
         .nav-link:hover {
             font-weight: bold;
             font-size: 1.1em;
             color: #3f2c8a;
         }
+
         .navbar {
             height: 60px;
             background-color: rgb(226, 226, 138);
             z-index: -1;
             opacity: 0;
         }
+
         body {
             background: linear-gradient(135deg, #566c82, #8a5aa0);
             font-family: Arial, sans-serif;
@@ -32,6 +38,7 @@
             height: 100vh;
             margin: 0;
         }
+
         .container {
             max-width: 400px;
             background: linear-gradient(135deg, #b4ccd8, #ccdae2);
@@ -40,10 +47,14 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
+
         h2 {
             color: #3f2c8a;
             margin-bottom: 30px;
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
         }
+
         .form-control {
             border-radius: 30px;
             padding: 15px;
@@ -51,6 +62,7 @@
             border: 1px solid #dcdcdc;
             background: #eff3f8;
         }
+
         .btn-primary {
             border-radius: 30px;
             background: linear-gradient(135deg, #666576, #6b7386);
@@ -60,25 +72,37 @@
             transition: background 0.3s;
             width: 100%;
         }
+
         .btn-primary:hover {
             background: linear-gradient(135deg, #6b7386, #666576);
         }
+
         .form-label {
             color: #3f2c8a;
             font-weight: bold;
         }
+
         p {
             color: #3f2c8a;
+            font-family: 'Poppins', sans-serif;
         }
+
         a {
             color: #6fa3ef;
             text-decoration: none;
+            font-family: 'Poppins', sans-serif !important;
         }
+
         a:hover {
             text-decoration: underline;
         }
+
+        .form-label {
+            font-family: 'Poppins', sans-serif !important;
+        }
     </style>
 </head>
+
 <body>
 
     <div class="container">
@@ -99,5 +123,5 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.2/js/bootstrap.min.js"></script>
 </body>
-</html>
 
+</html>
