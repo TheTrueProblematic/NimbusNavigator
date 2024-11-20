@@ -118,6 +118,10 @@
             grid-column: span 2;
             grid-row: span 2;
         }
+        .weeklyForecast-card {
+            grid-column: span 3;
+            grid-row: span 2;
+        }
 
         .grid-container {
             display: grid;
@@ -233,6 +237,17 @@
                 <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{moonIcon}}"
                     alt="Moon Phase Icon" class="weather-icon">
             </div>
+             <div class="card">
+                <h3>HOURLY FORECAST CARD</h3>
+                {{!-- <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{moonIcon}}"
+                    alt="Moon Phase Icon" class="weather-icon"> --}}
+            </div>
+             <div class="card weeklyForecast-card">
+                <h3>WEEKLY FORECAST CARD</h3>
+                {{!-- <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{moonIcon}}"
+                    alt="Moon Phase Icon" class="weather-icon"> --}}
+            </div>
+           
 
         </div>
     </div>

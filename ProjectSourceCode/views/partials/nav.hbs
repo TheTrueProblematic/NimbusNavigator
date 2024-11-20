@@ -1,54 +1,3 @@
-{{!-- <head>
-    <style>
-        .nav-link {
-            transition: font-weight 0.3s, font-size 0.3s, color 0.3s;
-        }
-        .nav-link:hover {
-            font-weight: bold;
-            font-size: 1.1em;
-        }
-        .navbar {
-            height: 60px;
-            background-color: #D1E9F6;
-        }
-    </style>
-</head>
-<header>
-    <nav class="navbar navbar-expand-sm border-bottom">
-        <div class="container">
-            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbar-collapse" aria-controls="navbar" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbar-collapse">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <!-- TODO: For Discover, add a <a> tag with an attribute href to call the '/discover' API -->
-                        <a class="nav-link" href="/currentWeather">Current Weather</a>
-                    </li>
-                    <li class="nav-item">
-                        <!-- TODO: For Discover, add a <a> tag with an attribute href to call the '/discover' API -->
-                        <a class="nav-link" href="/weeklyForecast">Weekly Forecast</a>
-                    </li>
-                    <li class="nav-item">
-                        <!-- TODO: For Discover, add a <a> tag with an attribute href to call the '/discover' API -->
-                        <a class="nav-link" href="/climateContest">Climate Contest</a>
-                    </li>
-                    <li class="nav-item">
-                        <!-- TODO: For Discover, add a <a> tag with an attribute href to call the '/discover' API -->
-                        <a class="nav-link" href="/weatherFacts">Weather Facts</a>
-                    </li>
-                </ul>
-                <div class="nav-item me-1">
-                    <a class="nav-link" href="/logout">logout</a>
-                    <!-- TODO: For Logout, add a <a> tag with an attribute href to call the '/logout API -->
-                </div>
-            </div>
-        </div>
-    </nav>
-</header> --}}
-
 <style>
     .collapse {
         z-index: 1050;
@@ -57,7 +6,7 @@
 
     .collapse2 {
         z-index: 1051;
-       background-color: #815fa8; 
+        background-color: #666576;
         /* Ensure the dropdown content appears above other elements */
     }
 
@@ -67,11 +16,29 @@
 
     .nav-list .right {
         margin-left: auto;
-
-
         /* Push to the right */
     }
+
+    /* Make links bold and bigger */
+    #navbarToggleExternalContent .nav-link {
+        font-weight: bold !important; /* Ensure bold style is applied */
+        font-size: 1.5rem !important; /* Make links bigger */
+        color: white !important; /* Set color to white */
+    }
+
+    #navbarToggleExternalContent .nav-link:hover {
+        color: #ffd700 !important; /* Add hover effect */
+    }
+
+    .collapse2 h4,
+    .collapse2 span {
+        font-weight: bold !important;
+        font-size: 1.5rem !important;
+        color: white !important;
+    }
 </style>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -89,7 +56,7 @@
             {{!-- <li class="nav-item"> --}}
                 <!-- TODO: For Discover, add a <a> tag with an attribute href to call the '/discover' API -->
                 <a class="nav-link" href="/currentWeather">Current Weather</a>
-                <a class="nav-link" href="/forecast">Forecast</a>
+                <a class="nav-link" href="/weeklyForecast">Weekly Forecast</a>
                 <a class="nav-link" href="/weatherFacts">Weather Facts</a>
                 <a class="nav-link" href="/climateContest">Climate Contest</a>
                 {{!--
