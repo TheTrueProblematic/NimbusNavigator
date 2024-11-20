@@ -487,42 +487,48 @@ app.get('/climateContest', (req, res) => {
 app.get('/weatherFacts', (req, res) => {
     res.render('pages/weatherFacts');
 });
-app.get('/forecast', (req, res) => {
-    var zip = req.session.user.zipcode;
+app.get('/forecast', async (req, res) => {
+    const zip = req.session.user.zipcode;
     const location = zipcodes.lookup(zip);
 
     if (!location) {
-        return res.render('pages/forecast', {message: 'Invalid zip code.', error: true});
+        return res.render('pages/forecast', { message: 'Invalid zip code.', error: true });
     }
 
     const latitude = location.latitude;
     const longitude = location.longitude;
 
-    axios.get(`https://api.weather.gov/points/${latitude},${longitude}/forecast/hourly`)
-        .then(response => {
-            const hourlyForecasts = response.data.properties.periods;
+    try {
+        // Get coordinates
+        const gridResponse = await axios.get(`https://api.weather.gov/points/${latitude},${longitude}`);
+        const gridData = gridResponse.data;
+        const forecastUrl = gridData.properties.forecastHourly;
 
-            // Group data by day of the week
-            const weeklyForecast = hourlyForecasts.reduce((acc, forecast) => {
-                const dayName = new Date(forecast.startTime).toLocaleDateString('en-US', {weekday: 'long'});
-                if (!acc[dayName]) acc[dayName] = [];
-                acc[dayName].push({
-                    hour: new Date(forecast.startTime).getHours(),
-                    temperature: forecast.temperature,
-                    temperatureUnit: forecast.temperatureUnit,
-                    shortForecast: forecast.shortForecast,
-                });
-                return acc;
-            }, {});
+        // Get the hourly forecast
+        const forecastResponse = await axios.get(forecastUrl);
+        const hourlyForecasts = forecastResponse.data.properties.periods;
 
-            // Pass to template
-            res.render('pages/forecast', {weeklyForecast});
-        })
-        .catch(error => {
-            console.error('Error fetching hourly forecast data:', error);
-            res.render('pages/forecast', {weeklyForecast: [], error: true});
-        });
+        // Group data by day of the week
+        const weeklyForecast = hourlyForecasts.reduce((acc, forecast) => {
+            const dayName = new Date(forecast.startTime).toLocaleDateString('en-US', { weekday: 'long' });
+            if (!acc[dayName]) acc[dayName] = [];
+            acc[dayName].push({
+                hour: new Date(forecast.startTime).getHours(),
+                temperature: forecast.temperature,
+                temperatureUnit: forecast.temperatureUnit,
+                shortForecast: forecast.shortForecast,
+            });
+            return acc;
+        }, {});
+
+        // Render
+        res.render('pages/forecast', { weeklyForecast, error: false });
+    } catch (error) {
+        console.error('Error fetching forecast data:', error);
+        res.render('pages/forecast', { weeklyForecast: [], message: 'Unable to fetch forecast.', error: true });
+    }
 });
+
 app.get('/weeklyForecast', (req, res) => {
     var zip = req.session.user.zipcode;
     const location = zipcodes.lookup(zip);
