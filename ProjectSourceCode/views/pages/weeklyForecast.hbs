@@ -78,7 +78,7 @@
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            /* justify-content: center; */
             gap: 10px;
         }
 
@@ -102,84 +102,26 @@
     <h1>Weekly Weather Forecast</h1>
 
     <div class="forecast-table">
+        {{#each weeklyForecast as |hours dayName|}}
         <div class="forecast-day">
-            <div class="day-header">Monday</div>
+            <div class="day-header">{{dayName}}</div>
             <div class="weather-details">
-                <div class="weather-item">🌞 75°F / 55°F</div>
-                <div class="weather-item">Sunny</div>
-                <div class="weather-item">Wind: 5 mph</div>
-                <div class="weather-item">FILLER</div>
-                <div class="weather-item">FILLER</div>
-                <div class="weather-item">FILLER</div>
+                <div class="weather-item">High: {{getHighTemperature hours}}°F / Low: {{getLowTemperature hours}}°F</div>
+                <div class="weather-item">Windspeed: {{hours.[0].windSpeed}}</div>
+
+                <!-- Hourly Data -->
+                {{#each hours}}
+                <div class="weather-item">
+                    {{hour}}:00 - {{temperature}}°{{temperatureUnit}} ({{shortForecast}})
+                </div>
+                {{/each}}
             </div>
         </div>
-        <div class="forecast-day">
-            <div class="day-header">Tuesday</div>
-            <div class="weather-details">
-                <div class="weather-item">🌦️ 68°F / 50°F</div>
-                <div class="weather-item">Partly Cloudy</div>
-                <div class="weather-item">Wind: 8 mph</div>
-                <div class="weather-item">FILLER</div>
-                <div class="weather-item">FILLER</div>
-                <div class="weather-item">FILLER</div>
-            </div>
-        </div>
-        <div class="forecast-day">
-            <div class="day-header">Wednesday</div>
-            <div class="weather-details">
-                <div class="weather-item">🌧️ 60°F / 48°F</div>
-                <div class="weather-item">Rainy</div>
-                <div class="weather-item">Wind: 10 mph</div>
-                <div class="weather-item">FILLER</div>
-                <div class="weather-item">FILLER</div>
-                <div class="weather-item">FILLER</div>
-            </div>
-        </div>
-        <div class="forecast-day">
-            <div class="day-header">Thursday</div>
-            <div class="weather-details">
-                <div class="weather-item">☁️ 65°F / 50°F</div>
-                <div class="weather-item">Cloudy</div>
-                <div class="weather-item">Wind: 7 mph</div>
-                <div class="weather-item">FILLER</div>
-                <div class="weather-item">FILLER</div>
-                <div class="weather-item">FILLER</div>
-            </div>
-        </div>
-        <div class="forecast-day">
-            <div class="day-header">Friday</div>
-            <div class="weather-details">
-                <div class="weather-item">🌞 70°F / 52°F</div>
-                <div class="weather-item">Sunny</div>
-                <div class="weather-item">Wind: 6 mph</div>
-                <div class="weather-item">FILLER</div>
-                <div class="weather-item">FILLER</div>
-                <div class="weather-item">FILLER</div>
-            </div>
-        </div>
-        <div class="forecast-day">
-            <div class="day-header">Saturday</div>
-            <div class="weather-details">
-                <div class="weather-item">🌤️ 72°F / 54°F</div>
-                <div class="weather-item">Partly Sunny</div>
-                <div class="weather-item">Wind: 4 mph</div>
-                <div class="weather-item">FILLER</div>
-                <div class="weather-item">FILLER</div>
-                <div class="weather-item">FILLER</div>
-            </div>
-        </div>
-        <div class="forecast-day">
-            <div class="day-header">Sunday</div>
-            <div class="weather-details">
-                <div class="weather-item">🌦️ 68°F / 53°F</div>
-                <div class="weather-item">Showers</div>
-                <div class="weather-item">Wind: 9 mph</div>
-                <div class="weather-item">FILLER</div>
-                <div class="weather-item">FILLER</div>
-                <div class="weather-item">FILLER</div>
-            </div>
-        </div>
+        {{/each}}
     </div>
+
 </body>
+
+
 
 </html>

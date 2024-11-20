@@ -23,6 +23,12 @@ const hbs = handlebars.create({
                 return '';
             }
         },
+        getHighTemperature: (hours) => {
+            return Math.max(...hours.map(hour => hour.temperature));
+        },
+        getLowTemperature: (hours) => {
+            return Math.min(...hours.map(hour => hour.temperature));
+        }
     },
 });
 
@@ -529,41 +535,77 @@ app.get('/forecast', async (req, res) => {
     }
 });
 
-app.get('/weeklyForecast', (req, res) => {
-    var zip = req.session.user.zipcode;
+app.get('/weeklyForecast', async (req, res) => {
+    const zip = req.session.user.zipcode;
     const location = zipcodes.lookup(zip);
 
     if (!location) {
-        return res.render('pages/weeklyForecast', {message: 'Invalid zip code.', error: true});
+        return res.render('pages/weeklyForecast', { message: 'Invalid zip code.', error: true });
     }
 
     const latitude = location.latitude;
     const longitude = location.longitude;
 
-    axios.get(`https://api.weather.gov/points/${latitude},${longitude}/forecast/hourly`)
-        .then(response => {
-            const hourlyForecasts = response.data.properties.periods;
+    try {
+        // NWS API call
+        const gridResponse = await axios.get(`https://api.weather.gov/points/${latitude},${longitude}`);
+        const gridData = gridResponse.data;
+        const forecastUrl = gridData.properties.forecastHourly;
 
-            // Group data by day of the week
-            const weeklyForecast = hourlyForecasts.reduce((acc, forecast) => {
-                const dayName = new Date(forecast.startTime).toLocaleDateString('en-US', {weekday: 'long'});
-                if (!acc[dayName]) acc[dayName] = [];
-                acc[dayName].push({
-                    hour: new Date(forecast.startTime).getHours(),
+        // Get the hourly forecast
+        const forecastResponse = await axios.get(forecastUrl);
+        const hourlyForecasts = forecastResponse.data.properties.periods;
+
+        // Set the timezone to MST. Later we can implement dynamic timezone conversiton
+        const timezone = 'America/Denver';
+        const now = new Date();
+        const currentLocalTime = new Date(
+            now.toLocaleString('en-US', { timeZone: timezone })
+        );
+
+        // Process and group forecasts
+        const weeklyForecast = hourlyForecasts.reduce((acc, forecast) => {
+            const forecastTime = new Date(forecast.startTime);
+
+            // Convert to local time (MST in this case)
+            const localDay = new Intl.DateTimeFormat('en-US', {
+                timeZone: timezone,
+                weekday: 'long',
+            }).format(forecastTime);
+
+            const localHour = new Intl.DateTimeFormat('en-US', {
+                timeZone: timezone,
+                hour: '2-digit',
+                hour12: false,
+            }).format(forecastTime);
+
+            // Only display future hours
+            const isSameDay = forecastTime.toDateString() === currentLocalTime.toDateString();
+            const isFutureHour = forecastTime >= currentLocalTime;
+
+            if (!acc[localDay]) acc[localDay] = [];
+            if (!isSameDay || (isSameDay && isFutureHour)) {
+                acc[localDay].push({
+                    hour: localHour,
                     temperature: forecast.temperature,
                     temperatureUnit: forecast.temperatureUnit,
                     shortForecast: forecast.shortForecast,
+                    forecast: forecast.forecast,
+                    windSpeed: forecast.windSpeed,
+                    detailedForecast: forecast.detailedForecast,
                 });
-                return acc;
-            }, {});
+            }
 
-            // Pass to template
-            res.render('pages/weeklyForecast', {weeklyForecast});
-        })
-        .catch(error => {
-            console.error('Error fetching hourly weeklyForecast data:', error);
-            res.render('pages/weeklyForecast', {weeklyForecast: [], error: true});
-        });
+            return acc;
+        }, {});
+
+        // Render success
+        res.render('pages/weeklyForecast', { weeklyForecast, error: false });
+    } catch (error) {
+        console.error('Error fetching forecast data:', error);
+        // Render error
+        res.render('pages/weeklyForecast', { weeklyForecast: [], message: 'Unable to fetch forecast.', error: true });
+    }
 });
 
 // Starting the server and keeping the connection open to listen for more requests
