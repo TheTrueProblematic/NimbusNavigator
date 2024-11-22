@@ -74,7 +74,6 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
         }
 
-
         .main-content {
             margin-left: 33.3333%;
             padding: 20px;
@@ -100,7 +99,7 @@
             background: linear-gradient(145deg, #9dafb5, #bbcab6);
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-
+            overflow: hidden; /* Added to prevent content overflow */
         }
 
         .card:hover {
@@ -123,7 +122,8 @@
         }
 
         .info-card {
-            /* Remove grid-column and grid-row to make the card same width as others */
+            /* Ensure the card does not overflow */
+            overflow: hidden;
         }
 
         .weeklyForecast-card {
@@ -135,6 +135,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
+            width: 100%; /* Ensure grid container fits within parent */
         }
 
         .list-item {
@@ -145,6 +146,7 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s;
             text-align: center;
+            word-wrap: break-word; /* Ensure long content wraps */
         }
 
         .list-item:hover {
@@ -171,7 +173,6 @@
 </div>
 
 <div class="top-bar">
-    <!-- <div class="position-absolute top-0 end-0"></div> -->
     <h1>CURRENT WEATHER</h1>
 </div>
 
@@ -209,41 +210,43 @@
         </div>
 
         <!-- Information Card -->
-        <div class="card info-card grid-container">
+        <div class="card info-card">
             <h3 class="card-title">Information</h3>
-            {{#ifNotNA heatIndex}}
-                <span class="list-item">Heat Index: {{heatIndex}}°F</span>
-            {{/ifNotNA}}
-            {{#ifNotNA humidity}}
-                <span class="list-item">Humidity: {{humidity}}%</span>
-            {{/ifNotNA}}
-            {{#ifNotNA dewpoint}}
-                <span class="list-item">Dew Point: {{dewpoint}}°F</span>
-            {{/ifNotNA}}
-            {{#ifNotNA barometricPressure}}
-                <span class="list-item">Pressure: {{barometricPressure}} inHg</span>
-            {{/ifNotNA}}
-            {{#ifNotNA seaLevelPressure}}
-                <span class="list-item">Sea Level Pressure: {{seaLevelPressure}} inHg</span>
-            {{/ifNotNA}}
-            {{#ifNotNA visibility}}
-                <span class="list-item">Visibility: {{visibility}} miles</span>
-            {{/ifNotNA}}
-            {{#ifNotNA precipitation}}
-                <span class="list-item">Precipitation: {{precipitation}} inches</span>
-            {{/ifNotNA}}
-            {{#ifNotNA precipitation3h}}
-                <span class="list-item">Precipitation (3h): {{precipitation3h}} inches</span>
-            {{/ifNotNA}}
-            {{#ifNotNA precipitation6h}}
-                <span class="list-item">Precipitation (6h): {{precipitation6h}} inches</span>
-            {{/ifNotNA}}
-            {{#ifNotNA maxTempPast24H}}
-                <span class="list-item">Max Temp Last 24h: {{maxTempPast24H}}°F</span>
-            {{/ifNotNA}}
-            {{#ifNotNA minTempPast24H}}
-                <span class="list-item">Min Temp Last 24h: {{minTempPast24H}}°F</span>
-            {{/ifNotNA}}
+            <div class="grid-container">
+                {{#ifNotNA heatIndex}}
+                    <span class="list-item">Heat Index: {{heatIndex}}°F</span>
+                {{/ifNotNA}}
+                {{#ifNotNA humidity}}
+                    <span class="list-item">Humidity: {{humidity}}%</span>
+                {{/ifNotNA}}
+                {{#ifNotNA dewpoint}}
+                    <span class="list-item">Dew Point: {{dewpoint}}°F</span>
+                {{/ifNotNA}}
+                {{#ifNotNA barometricPressure}}
+                    <span class="list-item">Pressure: {{barometricPressure}} inHg</span>
+                {{/ifNotNA}}
+                {{#ifNotNA seaLevelPressure}}
+                    <span class="list-item">Sea Level Pressure: {{seaLevelPressure}} inHg</span>
+                {{/ifNotNA}}
+                {{#ifNotNA visibility}}
+                    <span class="list-item">Visibility: {{visibility}} miles</span>
+                {{/ifNotNA}}
+                {{#ifNotNA precipitation}}
+                    <span class="list-item">Precipitation: {{precipitation}} inches</span>
+                {{/ifNotNA}}
+                {{#ifNotNA precipitation3h}}
+                    <span class="list-item">Precipitation (3h): {{precipitation3h}} inches</span>
+                {{/ifNotNA}}
+                {{#ifNotNA precipitation6h}}
+                    <span class="list-item">Precipitation (6h): {{precipitation6h}} inches</span>
+                {{/ifNotNA}}
+                {{#ifNotNA maxTempPast24H}}
+                    <span class="list-item">Max Temp Last 24h: {{maxTempPast24H}}°F</span>
+                {{/ifNotNA}}
+                {{#ifNotNA minTempPast24H}}
+                    <span class="list-item">Min Temp Last 24h: {{minTempPast24H}}°F</span>
+                {{/ifNotNA}}
+            </div>
         </div>
 
         <!-- Moon Card -->
@@ -255,14 +258,10 @@
 
         <div class="card">
             <h3>HOURLY FORECAST CARD</h3>
-            {{!-- <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{moonIcon}}"
-                alt="Moon Phase Icon" class="weather-icon"> --}}
         </div>
 
         <div class="card weeklyForecast-card">
             <h3>WEEKLY FORECAST CARD</h3>
-            {{!-- <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{moonIcon}}"
-                alt="Moon Phase Icon" class="weather-icon"> --}}
         </div>
     </div>
 </div>
