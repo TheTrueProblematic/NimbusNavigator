@@ -144,17 +144,17 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// // Authentication Middleware
-// const auth = (req, res, next) => {
-//     if (!req.session.user) {
-//         // Default to login page
-//         return res.redirect('/login');
-//     }
-//     next();
-// };
+// Authentication Middleware
+const auth = (req, res, next) => {
+    if (!req.session.user) {
+        // Default to login page
+        return res.redirect('/login');
+    }
+    next();
+};
 
 // Apply authentication middleware to all routes after this
-// app.use(auth);
+app.use(auth);
 
 // Function to determine Beaufort number based on wind speed in mph
 function getBeaufortNumber(windSpeedMph) {
@@ -457,10 +457,10 @@ app.get('/forecast', (req, res) => {
         });
 });
 
-// endpoint for lab-11
-app.get('/welcome', (req, res) => {
-    res.json({status: 'success', message: 'Welcome!'});
-});
+// // endpoint for lab-11
+// app.get('/welcome', (req, res) => {
+//     res.json({status: 'success', message: 'Welcome!'});
+// });
 
 // start the server on port 3000 and export the 
 // server object for use in other files
