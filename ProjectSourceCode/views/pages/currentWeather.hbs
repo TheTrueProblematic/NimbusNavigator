@@ -133,7 +133,7 @@
 
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 15px;
             width: 100%; /* Ensure grid container fits within parent */
         }
@@ -234,17 +234,17 @@
                 {{#ifNotNA precipitation}}
                     <span class="list-item">Precipitation: {{precipitation}} inches</span>
                 {{/ifNotNA}}
-                {{#ifNotNA precipitation3h}}
-                    <span class="list-item">Precipitation (3h): {{precipitation3h}} inches</span>
-                {{/ifNotNA}}
-                {{#ifNotNA precipitation6h}}
-                    <span class="list-item">Precipitation (6h): {{precipitation6h}} inches</span>
-                {{/ifNotNA}}
-                {{#ifNotNA maxTempPast24H}}
-                    <span class="list-item">Max Temp Last 24h: {{maxTempPast24H}}°F</span>
-                {{/ifNotNA}}
-                {{#ifNotNA minTempPast24H}}
-                    <span class="list-item">Min Temp Last 24h: {{minTempPast24H}}°F</span>
+<!--                {{#ifNotNA precipitation3h}}-->
+<!--                    <span class="list-item">Precipitation (3h): {{precipitation3h}} inches</span>-->
+<!--                {{/ifNotNA}}-->
+<!--                {{#ifNotNA precipitation6h}}-->
+<!--                    <span class="list-item">Precipitation (6h): {{precipitation6h}} inches</span>-->
+<!--                {{/ifNotNA}}-->
+<!--                {{#ifNotNA maxTempPast24H}}-->
+<!--                    <span class="list-item">Max Temp Last 24h: {{maxTempPast24H}}°F</span>-->
+<!--                {{/ifNotNA}}-->
+<!--                {{#ifNotNA minTempPast24H}}-->
+<!--                    <span class="list-item">Min Temp Last 24h: {{minTempPast24H}}°F</span>-->
                 {{/ifNotNA}}
             </div>
         </div>
