@@ -13,14 +13,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+
         body {
             margin: 0;
             padding: 0;
             font-family: 'Helvetica Neue', Arial, sans-serif;
             background-color: #c8c7be;
-            {{!-- background: repeating-linear-gradient(45deg, #c8c7be, #9dafb5 90px, #c8c7be 20px); --}}
+
+                {
+                    {
+                    !-- background: repeating-linear-gradient(45deg, #c8c7be, #9dafb5 90px, #c8c7be 20px);
+                    --
+                }
+            }
+
             color: #0d1a12 !important;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins',
+            sans-serif;
         }
 
         .navbar {
@@ -160,96 +169,125 @@
         h1 {
             font-family: 'Playfair Display', serif;
         }
+
+        .hourly-forecast-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .hourly-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #c8c7be;
+            font-size: 14px;
+        }
+
+        .hourly-row span {
+            flex: 1;
+            text-align: center;
+        }
     </style>
 </head>
 
 <body>
-<!-- Left vertical bar -->
-<div class="left-bar">
-    <h2 class="card">{{currentConditions}} with a temperature of {{currentTemp}}°F</h2>
-    <h3>Hello {{name}} ({{username}}) from {{zip}}</h3>
-    <img src="/fillerImages/{{imageName}}" alt="Weather Image">
-</div>
+    <!-- Left vertical bar -->
+    <div class="left-bar">
+        <h2 class="card">{{currentConditions}} with a temperature of {{currentTemp}}°F</h2>
+        <h3>Hello {{name}} ({{username}}) from {{zip}}</h3>
+        <img src="/fillerImages/{{imageName}}" alt="Weather Image">
+    </div>
 
-<div class="top-bar">
-    <h1>CURRENT WEATHER</h1>
-</div>
+    <div class="top-bar">
+        <h1>CURRENT WEATHER</h1>
+    </div>
 
-<!-- Main content area -->
-<div class="main-content">
-    <div class="card-grid">
-        <!-- Weather Card -->
-        <div class="card">
-            <h3>Weather</h3>
-            <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{weatherIcon}}"
-                 alt="Weather Icon" class="weather-icon">
-            <p>{{currentTemp}}°F</p>
-        </div>
+    <!-- Main content area -->
+    <div class="main-content">
+        <div class="card-grid">
+            <!-- Weather Card -->
+            <div class="card">
+                <h3>Weather</h3>
+                <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{weatherIcon}}"
+                    alt="Weather Icon" class="weather-icon">
+                <p>{{currentTemp}}°F</p>
+            </div>
 
-        <!-- Wind Card -->
-        <div class="card d-flex flex-row align-items-center wind-card" style="padding: 10px;">
+            <!-- Wind Card -->
+            <div class="card d-flex flex-row align-items-center wind-card" style="padding: 10px;">
 
-            <div>
-                <h3>Wind</h3>
-                {{#ifNotNA windSpeed}}
+                <div>
+                    <h3>Wind</h3>
+                    {{#ifNotNA windSpeed}}
                     <p><strong>Speed:</strong> {{windSpeed}} mph</p>
-                {{/ifNotNA}}
-                {{#ifNotNA windDirection}}
+                    {{/ifNotNA}}
+                    {{#ifNotNA windDirection}}
                     <p><strong>Direction:</strong> {{windDirection}}°</p>
-                {{/ifNotNA}}
-                {{#ifNotNA windChill}}
+                    {{/ifNotNA}}
+                    {{#ifNotNA windChill}}
                     <p><strong>Wind Chill:</strong> {{windChill}}</p>
-                {{/ifNotNA}}
-                {{#ifNotNA windGust}}
+                    {{/ifNotNA}}
+                    {{#ifNotNA windGust}}
                     <p><strong>Gust:</strong> {{windGust}} mph</p>
-                {{/ifNotNA}}
+                    {{/ifNotNA}}
+                </div>
+                <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{windIcon}}" alt="Wind Icon"
+                    class="weather-icon me-3">
             </div>
-            <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{windIcon}}" alt="Wind Icon"
-                 class="weather-icon me-3">
-        </div>
 
-        <!-- Information Card -->
-        <div class="card info-card">
-            <h3 class="card-title">Information</h3>
-            <div class="grid-container">
-                {{#ifNotNA heatIndex}}
+            <!-- Information Card -->
+            <div class="card info-card">
+                <h3 class="card-title">Information</h3>
+                <div class="grid-container">
+                    {{#ifNotNA heatIndex}}
                     <span class="list-item">Heat Index: {{heatIndex}}°F</span>
-                {{/ifNotNA}}
-                {{#ifNotNA humidity}}
+                    {{/ifNotNA}}
+                    {{#ifNotNA humidity}}
                     <span class="list-item">Humidity: {{humidity}}%</span>
-                {{/ifNotNA}}
-                {{#ifNotNA dewpoint}}
+                    {{/ifNotNA}}
+                    {{#ifNotNA dewpoint}}
                     <span class="list-item">Dew Point: {{dewpoint}}°F</span>
-                {{/ifNotNA}}
-                {{#ifNotNA barometricPressure}}
+                    {{/ifNotNA}}
+                    {{#ifNotNA barometricPressure}}
                     <span class="list-item">Pressure: {{barometricPressure}} inHg</span>
-                {{/ifNotNA}}
-                {{#ifNotNA visibility}}
+                    {{/ifNotNA}}
+                    {{#ifNotNA visibility}}
                     <span class="list-item">Visibility: {{visibility}} miles</span>
-                {{/ifNotNA}}
-                {{#ifNotNA precipitation}}
+                    {{/ifNotNA}}
+                    {{#ifNotNA precipitation}}
                     <span class="list-item">Precipitation: {{precipitation}} inches</span>
-                {{/ifNotNA}}
+                    {{/ifNotNA}}
+                </div>
             </div>
-        </div>
 
-        <!-- Moon Card -->
-        <div class="card">
-            <h3>{{moonPhaseString}}</h3>
-            <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{moonIcon}}"
-                 alt="Moon Phase Icon" class="weather-icon">
-        </div>
+            <!-- Moon Card -->
+            <div class="card">
+                <h3>{{moonPhaseString}}</h3>
+                <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{moonIcon}}"
+                    alt="Moon Phase Icon" class="weather-icon">
+            </div>
 
-        <div class="card">
-            <h3>HOURLY FORECAST CARD</h3>
-        </div>
+            <div class="card info-card">
+                <h3 class="card-title">Hourly Forecast</h3>
+                <div class="hourly-forecast-container">
+                    {{#each hourlyForecast as |hourData|}}
+                    <div class="hourly-row">
+                        <span><strong>{{hourData.hour}}:00</strong></span>
+                        <span>{{hourData.temperature}}°{{hourData.temperatureUnit}}</span>
+                        <span>{{hourData.shortForecast}}</span>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
 
-        <div class="card weeklyForecast-card">
-            <h3>WEEKLY FORECAST CARD</h3>
+            <div class="card weeklyForecast-card">
+                <h3>WEEKLY FORECAST CARD</h3>
+            </div>
         </div>
     </div>
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
