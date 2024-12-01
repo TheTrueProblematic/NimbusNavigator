@@ -96,6 +96,7 @@ app.post('/register', async (req, res) => {
         var hashy;
         if (req.body.password === req.body.cpassword) {
             hashy = await bcrypt.hash(req.body.password, 10);
+            
         } else {
             console.error('Passwords do not match.');
             return res.render('pages/register', {message: 'Passwords do not match.', error: true});
@@ -136,6 +137,7 @@ app.post('/login', async (req, res) => {
                 req.session.user = user;
                 req.session.save();
                 // Redirect to /currentWeather
+                console.log("Login success. Redirecting to /currentWeather ...");
                 res.redirect('/currentWeather');
             } else {
                 // Incorrect password
@@ -608,6 +610,13 @@ app.get('/weeklyForecast', async (req, res) => {
     }
 });
 
-// Starting the server and keeping the connection open to listen for more requests
-app.listen(3000);
+// // endpoint for lab-11
+// app.get('/welcome', (req, res) => {
+//     res.json({status: 'success', message: 'Welcome!'});
+// });
+
+// start the server on port 3000 and export the 
+// server object for use in other files
+module.exports = app.listen(3000);
+
 console.log('Server is listening on port 3000');

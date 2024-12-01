@@ -5,17 +5,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Current Weather for {{zip}}</title>
+    <link rel="icon" type="image/png" href="../../favicons/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../../favicons/favicon.svg" />
+    <link rel="shortcut icon" href="../../favicons/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../../favicons/apple-touch-icon.png" />
+    <link rel="manifest" href="../../favicons/site.webmanifest" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+
         body {
             margin: 0;
             padding: 0;
             font-family: 'Helvetica Neue', Arial, sans-serif;
             background-color: #c8c7be;
-            {{!-- background: repeating-linear-gradient(45deg, #c8c7be, #9dafb5 90px, #c8c7be 20px); --}}
+
+                {
+                    {
+                    !-- background: repeating-linear-gradient(45deg, #c8c7be, #9dafb5 90px, #c8c7be 20px);
+                    --
+                }
+            }
+
             color: #0d1a12 !important;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins',
+            sans-serif;
         }
 
         .navbar {
@@ -69,7 +83,6 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
         }
 
-
         .main-content {
             margin-left: 33.3333%;
             padding: 20px;
@@ -90,13 +103,12 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 15px;
             /* for fancy */
             border-radius: 12px;
             background: linear-gradient(145deg, #9dafb5, #bbcab6);
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-
+            overflow: hidden;
         }
 
         .card:hover {
@@ -119,18 +131,53 @@
         }
 
         .info-card {
-            grid-column: span 2;
-            grid-row: span 2;
+            overflow: hidden;
         }
-        .weeklyForecast-card {
-            grid-column: span 3;
-            grid-row: span 2;
+
+        .weeklyForecast-card .horizontal-forecast {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
+            overflow-x: auto;
+            padding: 10px;
+        }
+
+        .forecast-item {
+            background-color: #c8c7be;
+            border: 1px solid #b5a6b8;
+            border-radius: 8px;
+            padding: 10px 15px;
+            text-align: center;
+            min-width: 150px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .forecast-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .forecast-item h5 {
+            margin: 5px 0;
+            font-size: 1.1em;
+            font-family: 'Playfair Display', serif;
+            color: #0d1a12;
+        }
+
+        .forecast-item p {
+            margin: 3px 0;
+            font-size: 0.9em;
+            font-family: 'Poppins', sans-serif;
+            color: #333;
         }
 
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 15px;
+            width: 100%;
         }
 
         .list-item {
@@ -141,17 +188,40 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s;
             text-align: center;
+            word-wrap: break-word;
         }
 
         .list-item:hover {
             background-color: #b0b0a7;
         }
-        h3{
+
+        h3 {
             font-family: 'Playfair Display', serif;
             font-weight: bold !important;
         }
-        h1{
+
+        h1 {
             font-family: 'Playfair Display', serif;
+        }
+
+        .hourly-forecast-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .hourly-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #c8c7be;
+            font-size: 14px;
+        }
+
+        .hourly-row span {
+            flex: 1;
+            text-align: center;
         }
     </style>
 </head>
@@ -165,7 +235,6 @@
     </div>
 
     <div class="top-bar">
-        <!-- <div class="position-absolute top-0 end-0"></div> -->
         <h1>CURRENT WEATHER</h1>
     </div>
 
@@ -202,10 +271,10 @@
                     class="weather-icon me-3">
             </div>
 
-            <div class="row">
-                <!-- Information Card -->
-                <div class="card info-card grid-container">
-                    <h3 class="card-title">Information</h3>
+            <!-- Information Card -->
+            <div class="card info-card">
+                <h3 class="card-title">Information</h3>
+                <div class="grid-container">
                     {{#ifNotNA heatIndex}}
                     <span class="list-item">Heat Index: {{heatIndex}}°F</span>
                     {{/ifNotNA}}
@@ -218,26 +287,11 @@
                     {{#ifNotNA barometricPressure}}
                     <span class="list-item">Pressure: {{barometricPressure}} inHg</span>
                     {{/ifNotNA}}
-                    {{#ifNotNA seaLevelPressure}}
-                    <span class="list-item">Sea Level Pressure: {{seaLevelPressure}} inHg</span>
-                    {{/ifNotNA}}
                     {{#ifNotNA visibility}}
                     <span class="list-item">Visibility: {{visibility}} miles</span>
                     {{/ifNotNA}}
                     {{#ifNotNA precipitation}}
                     <span class="list-item">Precipitation: {{precipitation}} inches</span>
-                    {{/ifNotNA}}
-                    {{#ifNotNA precipitation3h}}
-                    <span class="list-item">Precipitation (3h): {{precipitation3h}} inches</span>
-                    {{/ifNotNA}}
-                    {{#ifNotNA precipitation6h}}
-                    <span class="list-item">Precipitation (6h): {{precipitation6h}} inches</span>
-                    {{/ifNotNA}}
-                    {{#ifNotNA maxTempPast24H}}
-                    <span class="list-item">Max Temp Last 24h: {{maxTempPast24H}}°F</span>
-                    {{/ifNotNA}}
-                    {{#ifNotNA minTempPast24H}}
-                    <span class="list-item">Min Temp Last 24h: {{minTempPast24H}}°F</span>
                     {{/ifNotNA}}
                 </div>
             </div>
@@ -248,17 +302,33 @@
                 <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{moonIcon}}"
                     alt="Moon Phase Icon" class="weather-icon">
             </div>
-             <div class="card">
-                <h3>HOURLY FORECAST CARD</h3>
-                {{!-- <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{moonIcon}}"
-                    alt="Moon Phase Icon" class="weather-icon"> --}}
+
+            <div class="card info-card">
+                <h3 class="card-title">Hourly Forecast</h3>
+                <div class="hourly-forecast-container">
+                    {{#each hourlyForecast as |hourData|}}
+                    <div class="hourly-row">
+                        <span><strong>{{hourData.hour}}:00</strong></span>
+                        <span>{{hourData.temperature}}°{{hourData.temperatureUnit}}</span>
+                        <span>{{hourData.shortForecast}}</span>
+                    </div>
+                    {{/each}}
+                </div>
             </div>
-             <div class="card weeklyForecast-card">
-                <h3>WEEKLY FORECAST CARD</h3>
-                {{!-- <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{moonIcon}}"
-                    alt="Moon Phase Icon" class="weather-icon"> --}}
+            
+            <!-- Weekly Forecast Card -->
+            <div class="card weeklyForecast-card">
+                <h3 class="card-title">Weekly Forecast</h3>
+                <div class="horizontal-forecast">
+                    {{#each temperatures}}
+                    <div class="forecast-item">
+                        <h5>{{name}}</h5>
+                        <p><strong>{{temperature}}°{{unit}}</strong></p>
+                        <p>{{detailedForecast}}</p>
+                    </div>
+                    {{/each}}
+                </div>
             </div>
-           
 
         </div>
     </div>
