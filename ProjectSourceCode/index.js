@@ -448,11 +448,11 @@ app.get('/currentWeather', (req, res) => {
             const moonPhases = {
                 'new moon': 'moon-new.svg',
                 'waxing crescent': 'moon-waxing-crescent.svg',
-                'first quarter': 'moon-first-quarter.svg',
+                '1st quarter': 'moon-first-quarter.svg',
                 'waxing gibbous': 'moon-waxing-gibbous.svg',
                 'full moon': 'moon-full.svg',
                 'waning gibbous': 'moon-waning-gibbous.svg',
-                'last quarter': 'moon-last-quarter.svg',
+                '3rd quarter': 'moon-last-quarter.svg',
                 'waning crescent': 'moon-waning-crescent.svg',
             };
 

@@ -330,6 +330,22 @@
                 </div>
             </div>
 
+            <div class="card info-card">
+                <h3 class="card-title">Hourly Forecast</h3>
+                <div class="hourly-forecast-container">
+                    {{#each hourlyForecast as |hourData|}}
+                    <div class="hourly-row">
+                        <span><strong>{{hourData.hour}}:00</strong></span>
+                        <span>{{hourData.temperature}}°{{hourData.temperatureUnit}}</span>
+                        <span>{{hourData.shortForecast}}</span>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+
+            {{!-- <div class="card weeklyForecast-card">
+                <h3>WEEKLY FORECAST CARD</h3>
+            </div> --}}
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
