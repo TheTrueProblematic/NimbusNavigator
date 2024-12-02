@@ -351,9 +351,9 @@ app.get('/currentWeather', (req, res) => {
             const precipitation6hInches =
                 precipitationLast6HoursMm !== null ? precipitationLast6HoursMm / 25.4 : 0.0;
 
-            // Prepare hourly forecast data
+            // Prepare hourly forecast data (Display only the next few hours)
             const hourlyForecastRaw = forecastHourlyData.properties.periods;
-            const hourlyForecast = hourlyForecastRaw.slice(0, 12).map(period => {
+            const hourlyForecast = hourlyForecastRaw.slice(0, 4).map(period => {
                 const startTime = new Date(period.startTime);
                 const options = { hour: 'numeric', hour12: true };
                 const hourString = startTime.toLocaleString('en-US', options);
