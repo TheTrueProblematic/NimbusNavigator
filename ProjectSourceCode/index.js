@@ -353,7 +353,7 @@ app.get('/currentWeather', (req, res) => {
 
             // Prepare hourly forecast data (Display only the next few hours)
             const hourlyForecastRaw = forecastHourlyData.properties.periods;
-            const hourlyForecast = hourlyForecastRaw.slice(0, 3).map(period => {
+            const hourlyForecast = hourlyForecastRaw.slice(0, 4).map(period => {
                 const startTime = new Date(period.startTime);
                 const options = { hour: 'numeric', hour12: true };
                 const hourString = startTime.toLocaleString('en-US', options);
