@@ -351,7 +351,7 @@ app.get('/currentWeather', (req, res) => {
             const precipitation6hInches =
                 precipitationLast6HoursMm !== null ? precipitationLast6HoursMm / 25.4 : 0.0;
 
-            // Prepare hourly forecast data (Display only the next 3 hours)
+            // Prepare hourly forecast data (Display only the next few hours)
             const hourlyForecastRaw = forecastHourlyData.properties.periods;
             const hourlyForecast = hourlyForecastRaw.slice(0, 3).map(period => {
                 const startTime = new Date(period.startTime);
@@ -364,29 +364,6 @@ app.get('/currentWeather', (req, res) => {
                     shortForecast: period.shortForecast,
                 };
             });
-
-            // Get next hour precipitation data
-            const nextHourPeriod = forecastHourlyData.properties.periods[0];
-
-            // Probability of precipitation
-            const nextHourPrecipitationProbability = nextHourPeriod.probabilityOfPrecipitation.value !== null
-                ? nextHourPeriod.probabilityOfPrecipitation.value.toFixed(0)
-                : 'N/A';
-
-            // Quantitative precipitation
-            let nextHourPrecipitationAmount = 'N/A';
-            if (nextHourPeriod.quantitativePrecipitation.value !== null) {
-                const precipValue = nextHourPeriod.quantitativePrecipitation.value;
-                const unitCode = nextHourPeriod.quantitativePrecipitation.unitCode;
-
-                if (unitCode.endsWith('mm')) {
-                    nextHourPrecipitationAmount = (precipValue / 25.4).toFixed(2); // mm to inches
-                } else if (unitCode.endsWith('in')) {
-                    nextHourPrecipitationAmount = precipValue.toFixed(2);
-                } else {
-                    console.warn('Unknown precipitation unit:', unitCode);
-                }
-            }
 
             // Prepare data for the template
             const templateData = {
@@ -414,8 +391,6 @@ app.get('/currentWeather', (req, res) => {
                 zip: zip,
                 moonPhaseString: "test",
                 hourlyForecast: hourlyForecast,
-                nextHourPrecipitationProbability: nextHourPrecipitationProbability,
-                nextHourPrecipitationAmount: nextHourPrecipitationAmount,
             };
 
             // Determine which image to use based on today's forecast description
