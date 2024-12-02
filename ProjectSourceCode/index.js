@@ -98,7 +98,7 @@ app.post('/register', async (req, res) => {
             hashy = await bcrypt.hash(req.body.password, 10);
         } else {
             console.error('Passwords do not match.');
-            return res.render('pages/register', {message: 'Passwords do not match.', error: true});
+            return res.render('pages/register', { message: 'Passwords do not match.', error: true });
         }
         const hash = hashy;
         // Insert username and hashed password into the 'users' table
@@ -109,7 +109,7 @@ app.post('/register', async (req, res) => {
         res.redirect('/login');
     } catch (error) {
         console.error('Error inserting user:', error);
-        return res.render('pages/register', {message: error.message, error: true});
+        return res.render('pages/register', { message: error.message, error: true });
     }
 });
 
@@ -127,7 +127,7 @@ app.post('/login', async (req, res) => {
 
         if (!user) {
             // User not found, redirect to register
-            res.render('pages/login', {message: 'Incorrect username or password.', error: true});
+            res.render('pages/login', { message: 'Incorrect username or password.', error: true });
         } else {
             // Compare password
             const match = await bcrypt.compare(req.body.password, user.password);
@@ -139,12 +139,12 @@ app.post('/login', async (req, res) => {
                 res.redirect('/currentWeather');
             } else {
                 // Incorrect password
-                res.render('pages/login', {message: 'Incorrect username or password.', error: true});
+                res.render('pages/login', { message: 'Incorrect username or password.', error: true });
             }
         }
     } catch (error) {
         console.error('Error during login:', error);
-        res.render('pages/login', {message: 'An error occurred.', error: true});
+        res.render('pages/login', { message: 'An error occurred.', error: true });
     }
 });
 
@@ -208,7 +208,7 @@ app.get('/currentWeather', (req, res) => {
     const location = zipcodes.lookup(zip);
 
     if (!location) {
-        return res.render('pages/currentWeather', {message: 'Invalid zip code.', error: true});
+        return res.render('pages/currentWeather', { message: 'Invalid zip code.', error: true });
     }
 
     const latitude = location.latitude;
@@ -223,16 +223,19 @@ app.get('/currentWeather', (req, res) => {
     })
         .then(response => {
             const forecastUrl = response.data.properties.forecast;
+            const forecastHourlyUrl = response.data.properties.forecastHourly;
             const observationStationsUrl = response.data.properties.observationStations;
 
             // Use Promise.all to make multiple requests in parallel
             return Promise.all([
                 axios.get(forecastUrl),
+                axios.get(forecastHourlyUrl),
                 axios.get(observationStationsUrl),
             ]);
         })
-        .then(([forecastResponse, stationsResponse]) => {
+        .then(([forecastResponse, forecastHourlyResponse, stationsResponse]) => {
             const forecastData = forecastResponse.data;
+            const forecastHourlyData = forecastHourlyResponse.data;
             const stationsData = stationsResponse.data;
 
             // Get the first station ID
@@ -244,10 +247,11 @@ app.get('/currentWeather', (req, res) => {
             // Make a request to get the latest observations
             return Promise.all([
                 forecastData,
+                forecastHourlyData,
                 axios.get(observationsUrl),
             ]);
         })
-        .then(([forecastData, observationsResponse]) => {
+        .then(([forecastData, forecastHourlyData, observationsResponse]) => {
             const observationsData = observationsResponse.data;
 
             // Extract the data we need and pass to the template
@@ -341,11 +345,25 @@ app.get('/currentWeather', (req, res) => {
             }
 
             const precipitationInches =
-                precipitationLastHourMm !== null ? precipitationLastHourMm / 25.4 : 0.00;
+                precipitationLastHourMm !== null ? precipitationLastHourMm / 25.4 : 0.0;
             const precipitation3hInches =
-                precipitationLast3HoursMm !== null ? precipitationLast3HoursMm / 25.4 : 0.00;
+                precipitationLast3HoursMm !== null ? precipitationLast3HoursMm / 25.4 : 0.0;
             const precipitation6hInches =
-                precipitationLast6HoursMm !== null ? precipitationLast6HoursMm / 25.4 : 0.00;
+                precipitationLast6HoursMm !== null ? precipitationLast6HoursMm / 25.4 : 0.0;
+
+            // Prepare hourly forecast data
+            const hourlyForecastRaw = forecastHourlyData.properties.periods;
+            const hourlyForecast = hourlyForecastRaw.slice(0, 12).map(period => {
+                const startTime = new Date(period.startTime);
+                const options = { hour: 'numeric', hour12: true };
+                const hourString = startTime.toLocaleString('en-US', options);
+                return {
+                    hour: hourString,
+                    temperature: period.temperature,
+                    temperatureUnit: period.temperatureUnit,
+                    shortForecast: period.shortForecast,
+                };
+            });
 
             // Prepare data for the template
             const templateData = {
@@ -372,6 +390,7 @@ app.get('/currentWeather', (req, res) => {
                 username: username,
                 zip: zip,
                 moonPhaseString: "test",
+                hourlyForecast: hourlyForecast,
             };
 
             // Determine which image to use based on today's forecast description
@@ -395,23 +414,23 @@ app.get('/currentWeather', (req, res) => {
             // Determine which weather icon to use based on current conditions
             // Map conditions to icons
             const weatherIcons = [
-                {keywords: ['clear', 'sunny'], icon: 'clear-day.svg'},
-                {keywords: ['cloudy'], icon: 'cloudy.svg'},
-                {keywords: ['overcast'], icon: 'overcast.svg'},
-                {keywords: ['drizzle'], icon: 'drizzle.svg'},
-                {keywords: ['hail'], icon: 'hail.svg'},
-                {keywords: ['rain'], icon: 'rain.svg'},
-                {keywords: ['sleet'], icon: 'sleet.svg'},
-                {keywords: ['smoke'], icon: 'smoke.svg'},
-                {keywords: ['snow'], icon: 'snow.svg'},
-                {keywords: ['mist'], icon: 'mist.svg'},
-                {keywords: ['hurricane'], icon: 'hurricane.svg'},
-                {keywords: ['tornado'], icon: 'tornado.svg'},
-                {keywords: ['wind'], icon: 'wind.svg'},
-                {keywords: ['dust'], icon: 'dust.svg'},
-                {keywords: ['thunderstorms', 'thunderstorm'], icon: 'thunderstorms.svg'},
-                {keywords: ['fog'], icon: 'fog.svg'},
-                {keywords: ['haze'], icon: 'haze.svg'},
+                { keywords: ['clear', 'sunny'], icon: 'clear-day.svg' },
+                { keywords: ['cloudy'], icon: 'cloudy.svg' },
+                { keywords: ['overcast'], icon: 'overcast.svg' },
+                { keywords: ['drizzle'], icon: 'drizzle.svg' },
+                { keywords: ['hail'], icon: 'hail.svg' },
+                { keywords: ['rain'], icon: 'rain.svg' },
+                { keywords: ['sleet'], icon: 'sleet.svg' },
+                { keywords: ['smoke'], icon: 'smoke.svg' },
+                { keywords: ['snow'], icon: 'snow.svg' },
+                { keywords: ['mist'], icon: 'mist.svg' },
+                { keywords: ['hurricane'], icon: 'hurricane.svg' },
+                { keywords: ['tornado'], icon: 'tornado.svg' },
+                { keywords: ['wind'], icon: 'wind.svg' },
+                { keywords: ['dust'], icon: 'dust.svg' },
+                { keywords: ['thunderstorms', 'thunderstorm'], icon: 'thunderstorms.svg' },
+                { keywords: ['fog'], icon: 'fog.svg' },
+                { keywords: ['haze'], icon: 'haze.svg' },
                 // Add more mappings as needed
             ];
 
@@ -440,7 +459,6 @@ app.get('/currentWeather', (req, res) => {
             const moonData = moonResponse.data[0];
             const moonPhase = moonData.Phase.toLowerCase();
             const moonPhaseNorm = moonData.Phase;
-
 
             // Map moon phases to icons
             const moonPhases = {
@@ -476,14 +494,14 @@ app.get('/currentWeather', (req, res) => {
         })
         .catch(error => {
             console.error('Error fetching data:', error);
-            res.render('pages/currentWeather', {temperatures: [], message: 'Error fetching data', error: true});
+            res.render('pages/currentWeather', { temperatures: [], message: 'Error fetching data', error: true });
         });
 });
 
 // GET /logout - Log the user out
 app.get('/logout', (req, res) => {
     req.session.destroy();
-    res.render('pages/logout', {message: 'Logged out Successfully'});
+    res.render('pages/logout', { message: 'Logged out Successfully' });
 });
 
 // NIMBUSNAV ROUTES
