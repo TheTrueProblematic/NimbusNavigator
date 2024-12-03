@@ -1,3 +1,4 @@
+</html>
 <!DOCTYPE html>
 <html lang="en">
 {{> message}}
@@ -38,10 +39,10 @@
             width: 100%;
             height: 60px;
             background-color: #666576;
-            border-bottom: 2px solid #c8c7be !important;
+            border-bottom: 2px solid #c8c7be !important; 
             box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
             z-index: 1000;
-            color: #0d1a12 !important;
+            color: #0d1a12 !important; 
         }
 
         .top-bar {
@@ -134,9 +135,43 @@
             overflow: hidden;
         }
 
-        .weeklyForecast-card {
-            grid-column: span 3;
-            grid-row: span 2;
+        .weeklyForecast-card .horizontal-forecast {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
+            overflow-x: auto;
+            padding: 10px;
+        }
+
+        .forecast-item {
+            background-color: #c8c7be;
+            border: 1px solid #b5a6b8;
+            border-radius: 8px;
+            padding: 10px 15px;
+            text-align: center;
+            min-width: 150px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .forecast-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .forecast-item h5 {
+            margin: 5px 0;
+            font-size: 1.1em;
+            font-family: 'Playfair Display', serif;
+            color: #0d1a12;
+        }
+
+        .forecast-item p {
+            margin: 3px 0;
+            font-size: 0.9em;
+            font-family: 'Poppins', sans-serif;
+            color: #333;
         }
 
         .grid-container {
@@ -189,6 +224,70 @@
             flex: 1;
             text-align: center;
         }
+
+        .card.weeklyForecast-card {
+            grid-column: span 3;
+        }
+
+        .card.moon-card {
+            grid-column: span 2;
+        }
+
+        .weekly-grid-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            /* 5 columns */
+            gap: 15px;
+            padding: 10px;
+        }
+
+        .weekly-forecast-item {
+            background-color: #c8c7be;
+            border: 1px solid #b5a6b8;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .weekly-forecast-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .weekly-forecast-item h5 {
+            margin: 5px 0;
+            font-size: 1.1em;
+            font-family: 'Playfair Display', serif;
+            color: #0d1a12;
+        }
+
+        .weekly-forecast-item p {
+            margin: 3px 0;
+            font-size: 0.9em;
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+        }
+         .hourly-forecast-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .hourly-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #c8c7be;
+            font-size: 14px;
+        }
+
+        .hourly-row span {
+            flex: 1;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -221,20 +320,26 @@
                 <div>
                     <h3>Wind</h3>
                     {{#ifNotNA windSpeed}}
-                    <p><strong>Speed:</strong> {{windSpeed}} mph</p>
+                    <p><strong>Speed:</strong> {{windSpeed}} mph</p> 
                     {{/ifNotNA}}
                     {{#ifNotNA windDirection}}
-                    <p><strong>Direction:</strong> {{windDirection}}°</p>
+                    <p><strong>Direction:</strong> {{windDirection}}°</p> 
                     {{/ifNotNA}}
                     {{#ifNotNA windChill}}
-                    <p><strong>Wind Chill:</strong> {{windChill}}</p>
+                    <p><strong>Wind Chill:</strong> {{windChill}}</p> 
                     {{/ifNotNA}}
                     {{#ifNotNA windGust}}
-                    <p><strong>Gust:</strong> {{windGust}} mph</p>
+                    <p><strong>Gust:</strong> {{windGust}} mph</p> 
                     {{/ifNotNA}}
                 </div>
-                <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{windIcon}}" alt="Wind Icon"
+                <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{windIcon}}" alt="Wind Icon" 
                     class="weather-icon me-3">
+            </div>
+             <!-- Moon Card -->
+            <div class="card moon-card">
+                <h3>{{moonPhaseString}}</h3>
+                <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{moonIcon}}" 
+                    alt="Moon Phase Icon" class="weather-icon">
             </div>
 
             <!-- Information Card -->
@@ -262,14 +367,21 @@
                 </div>
             </div>
 
-            <!-- Moon Card -->
-            <div class="card">
-                <h3>{{moonPhaseString}}</h3>
-                <img src="https://basmilius.github.io/weather-icons/production/fill/all/{{moonIcon}}"
-                    alt="Moon Phase Icon" class="weather-icon">
+            <!-- Weekly Forecast Card -->
+            <div class="card weeklyForecast-card">
+                <h3 class="card-title">Weekly Forecast</h3>
+                <div class="weekly-grid-container">
+                    {{#each temperatures}}
+                    <div class="weekly-forecast-item">
+                        <h5>{{name}}</h5>
+                        <p><strong>{{temperature}}°{{unit}}</strong></p>
+                        <p>{{detailedForecast}}</p>
+                    </div>
+                    {{/each}}
+                </div>
             </div>
 
-            <div class="card info-card">
+            {{!-- <div class="card info-card">
                 <h3 class="card-title">Hourly Forecast</h3>
                 <div class="hourly-forecast-container">
                     {{#each hourlyForecast as |hourData|}}
@@ -280,11 +392,8 @@
                     </div>
                     {{/each}}
                 </div>
-            </div>
-
-            {{!-- <div class="card weeklyForecast-card">
-                <h3>WEEKLY FORECAST CARD</h3>
             </div> --}}
+
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>

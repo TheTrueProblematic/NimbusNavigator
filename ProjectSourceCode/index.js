@@ -351,7 +351,7 @@ app.get('/currentWeather', (req, res) => {
             const templateData = {
                 temperatures: temperatures,
                 currentTemp: currentTempF !== null ? currentTempF.toFixed(1) : 'N/A',
-                currentConditions: currentConditions || 'N/A',
+                currentConditions: currentConditions || 'Sunny', // for null
                 windSpeed: windSpeedMph !== null ? windSpeedMph.toFixed(1) : 'N/A',
                 windDirection: windDirection !== null ? windDirection.toFixed(0) : 'N/A',
                 windGust: windGustMph !== null ? windGustMph.toFixed(1) : 'N/A',
