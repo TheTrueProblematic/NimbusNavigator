@@ -403,7 +403,7 @@ app.get('/currentWeather', (req, res) => {
                 imageName = 'rainy.png';
             } else if (description.includes('cloudy')) {
                 imageName = 'cloudy.png';
-            } else if (description.includes('sunny')) {
+            } else if (description.includes('sunny') || description.includes('clear')) {
                 imageName = 'sunny.png';
             } else {
                 imageName = 'login.png';
