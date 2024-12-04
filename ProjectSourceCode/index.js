@@ -393,8 +393,8 @@ app.get('/currentWeather', (req, res) => {
                 hourlyForecast: hourlyForecast,
             };
 
-            // Determine which image to use based on today's forecast description
-            const description = todayForecast.detailedForecast.toLowerCase();
+            // Determine which image to use based on current conditions
+            const description = currentConditions.toLowerCase();
             let imageName = 'other.png';
 
             if (description.includes('snow') || description.includes('snowy')) {
