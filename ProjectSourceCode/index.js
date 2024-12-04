@@ -406,7 +406,7 @@ app.get('/currentWeather', (req, res) => {
             } else if (description.includes('sunny')) {
                 imageName = 'sunny.png';
             } else {
-                imageName = 'other.png';
+                imageName = 'login.png';
             }
 
             templateData.imageName = imageName;
